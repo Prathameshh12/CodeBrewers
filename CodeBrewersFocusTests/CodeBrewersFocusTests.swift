@@ -1,9 +1,3 @@
-//
-//  CodeBrewersFocusTests.swift
-//  CodeBrewersFocusTests
-//
-//  Created by Prathamesh Ahire on 1/6/2025.
-//
 
 import Testing
 @testable import CodeBrewersFocus
