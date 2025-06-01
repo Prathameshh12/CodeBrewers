@@ -1,10 +1,3 @@
-//
-//  MainTabView.swift
-//  CodeBrewersPuzzle
-//
-//  Created by Prathamesh Ahire on 31/5/2025.
-//
-
 
 import SwiftUI
 
@@ -13,21 +6,21 @@ struct MainTabView: View {
         TabView {
             ReflectionsView()
                 .tabItem {
-                    Label("Reflections", systemImage: "square.and.pencil")
+                    Label("Reflections", systemImage: "bubbles.and.sparkles")
                 }
 
             NavigationView {
                 ContentView()
             }
             .tabItem {
-                Image(systemName: "plus.circle.fill")
+                Image(systemName: "plus.app")
                     .font(.system(size: 30))
                 Text("Create")
             }
 
             ExploreView()
                 .tabItem {
-                    Label("Explore", systemImage: "globe")
+                    Label("Explore", systemImage: "rectangle.3.group")
                 }
         }
     }

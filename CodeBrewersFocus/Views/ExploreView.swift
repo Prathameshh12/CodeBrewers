@@ -1,19 +1,34 @@
-//
-//  ExploreView.swift
-//  CodeBrewersPuzzle
-//
-//  Created by Prathamesh Ahire on 31/5/2025.
-//
-
 
 import SwiftUI
 
-struct ExploreView: View {
+struct ExploreView: View{
     var body: some View {
-        NavigationView {
-            Text("Explore Page")
-                .font(.title2)
-                .navigationTitle("Explore")
+        
+        NavigationStack(){
+            VStack(alignment: .leading){
+                HStack(){
+                    Image("wave")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                        .padding(.leading, 16)
+                        
+                    
+                    
+                    Text("Explore")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.leading, 8)
+                    
+                    Spacer()
+                }
+                Spacer()
+            }
+         
+                
+            }
         }
+       
+        
     }
-}

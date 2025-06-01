@@ -1,9 +1,4 @@
-//
-//  CodeBrewersFocusUITestsLaunchTests.swift
-//  CodeBrewersFocusUITests
-//
-//  Created by Prathamesh Ahire on 1/6/2025.
-//
+
 
 import XCTest
 
