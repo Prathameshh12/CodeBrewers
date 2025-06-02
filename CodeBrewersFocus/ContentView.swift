@@ -20,10 +20,6 @@ struct ContentView: View {
                             .font(.title)
                             .fontWeight(.bold)
                             .padding(.leading, 8)
-                        Text("Mr.Puppy")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .padding(.leading, 8)
                         
                         Spacer()
                     }
