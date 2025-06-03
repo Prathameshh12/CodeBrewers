@@ -75,6 +75,7 @@ struct PuzzleView: View {
                     }
                 }
             }
+            .padding(.top, 70)
             
             //Tool Box
             ZStack{
@@ -253,7 +254,7 @@ struct PuzzleView: View {
                 ZStack {
                     Image("Shelf")
                         .resizable()
-                        .frame(width: 402, height: 25)
+                        .frame(width: 402, height: 20)
                 }
                 .shadow(color: .black.opacity(0.45), radius: 5, x: 0, y: 4)
                 .padding(.top, -4)
@@ -272,9 +273,9 @@ struct PuzzleView: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom, 50)
+            .padding(.bottom, 80)
           
-            
+          
         }
         .navigationTitle("Create your masterpeice")
         .navigationBarTitleDisplayMode(.inline)
@@ -287,40 +288,3 @@ struct PuzzleView: View {
     MainTabView()
 }
 
-//import SwiftUI
-//
-//struct PuzzleView: View{
-//    var body: some View {
-//        
-//        VStack(alignment: .leading) {
-//            
-//            
-//            
-//            
-//            
-//            Button(action: {
-//                
-//            }) {
-//                NavigationLink(destination: ColourPuzzleView()) {
-//                    Text("Continue")
-//                        .frame(maxWidth: .infinity)
-//                        .padding()
-//                        .background(Color.blue)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(12)
-//                }
-//            }
-//            .padding(.horizontal)
-//            .padding(.top, 600)
-//        }
-//        .navigationTitle("Create your masterpeice")
-//        .navigationBarTitleDisplayMode(.inline)
-//    }
-//       
-//        
-//    }
-//#Preview {
-//    
-//    PuzzleView()
-//}
-//
