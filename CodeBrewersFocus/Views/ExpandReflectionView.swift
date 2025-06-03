@@ -6,7 +6,7 @@ struct ExpandReflectionView: View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [Color.gray, Color.white]), startPoint: .top, endPoint: .bottom)
             VStack{
-                Text("March 12, 2025")
+                Text("March 12, 2025 5")
                 Text("Wave")
                     .font(.largeTitle)
                     .fontWeight(.bold)
