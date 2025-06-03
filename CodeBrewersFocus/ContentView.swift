@@ -31,21 +31,21 @@ struct ContentView: View {
 
             VStack {
                 Spacer()
-
+                
                 VStack(spacing: 8) {
                     Text("Let's step into a\n mindful digital space")
                         .font(.title)
                         .fontWeight(.semibold)
                         .multilineTextAlignment(.center)
-
+                    
                     Text("Amazing things happen when you focus")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                 }
-
+                
                 Spacer()
-
-                 
+                
+                NavigationLink(destination: PuzzleView()) {
                     ZStack {
                         Circle()
                             .fill(Color.blue)
@@ -55,6 +55,7 @@ struct ContentView: View {
                             .font(.system(size: 30, weight: .bold))
                     }
                 }
+            }
                 .padding(.bottom, 24)
             }
             .padding()
