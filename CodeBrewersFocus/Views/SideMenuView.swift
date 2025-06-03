@@ -1,18 +1,24 @@
+
+
 import SwiftUI
 
 struct SideMenuView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            Text("👋 Hello, Mr. Puppy")
+            HStack(){
+            Image("wave")
+                .resizable()
+                .scaledToFill()
+                .frame(width: 40, height: 40)
+                .clipShape(Circle())
+                .padding(.leading, 16)
+                .padding(.top, 40)
+            Text("Mr. Puppy")
                 .font(.title2)
                 .fontWeight(.bold)
-                .padding(.top, 80)
-
-            Text("My progress")
-            Text("Instructions")
-            Text("Account")
-            Text("Manage subscription")
-            Text("Settings and privacy")
+                .padding(.top, 40)
+            
+        }
 
             Spacer()
         }
@@ -21,4 +27,8 @@ struct SideMenuView: View {
         .background(Color.white)
         .edgesIgnoringSafeArea(.all)
     }
+}
+
+#Preview {
+    MainTabView()
 }

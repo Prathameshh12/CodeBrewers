@@ -14,8 +14,8 @@ struct PuzzlePiece: Identifiable, Hashable {
 
 struct PuzzleView: View {
     @State private var pieces: [PuzzlePiece] = (1...30).map {
-        PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
-    }
+            PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
+        }
     
     //For tool box
     @State private var selectedPieceID: UUID? = nil
@@ -32,24 +32,7 @@ struct PuzzleView: View {
     
     var body: some View {
         VStack {
-            // Top bar
-            HStack {
-                Spacer()
-                ZStack {
-                    Text("Create your masterpiece")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                    HStack {
-                        Spacer()
-                        Image(systemName: "xmark")
-                            .font(.system(size: 20))
-                            .fontWeight(.semibold)
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-            .padding(.top, 0)
-            .padding(.bottom, 20)
+            
             
             //Puzzle
             VStack(spacing: 6) {
@@ -71,7 +54,7 @@ struct PuzzleView: View {
                                         .rotationEffect(.degrees(piece.rotation))
                                         .scaleEffect(x: piece.flippedHorizontally ? -1 : 1, y: piece.flippedVertically ? -1 : 1)
                                         .frame(width: 68, height: 68)
-//
+                                    //
                                 }
                                 
                                 puzzleBlock
@@ -150,7 +133,7 @@ struct PuzzleView: View {
                             if let selectedID = selectedPieceID,
                                let index = pieces.firstIndex(where: { $0.id == selectedID }) {
                                 withAnimation(.easeInOut(duration: 0.2)) {
-                                    pieces[index].rotation += 90
+                                   pieces[index].rotation += 90
                                     if pieces[index].rotation >= 360 {
                                         pieces[index].rotation = 0
                                     }
@@ -171,7 +154,7 @@ struct PuzzleView: View {
                             if let selectedID = selectedPieceID,
                                let index = pieces.firstIndex(where: { $0.id == selectedID }) {
                                 withAnimation(.easeInOut(duration: 0.2)) {
-                                    pieces[index].rotation -= 90
+                                   pieces[index].rotation -= 90
                                     if pieces[index].rotation < 0 {
                                         pieces[index].rotation += 360
                                     }
@@ -224,7 +207,7 @@ struct PuzzleView: View {
                 .padding(.vertical)
                 .padding(.horizontal)
             }
-
+            
             // On hold Shelf
             VStack(alignment: .leading) {
                 Text("On hold shelf")
@@ -239,7 +222,7 @@ struct PuzzleView: View {
                                 .resizable()
                                 .frame(width: 68, height: 68)
                         }
-
+                        
                         // Empty slots to drop into
                         ForEach(0..<(40 - onHoldShelf.count), id: \.self) { _ in
                             RoundedRectangle(cornerRadius: 8)
@@ -276,25 +259,32 @@ struct PuzzleView: View {
                 .padding(.top, -4)
             }
             
-            //Continue Button
-            Button(action: {}) {
-                            Text("Continue")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.gray.opacity(0.3))
-                                .foregroundColor(.gray)
-                                .cornerRadius(20)
-                                .fontWeight(.semibold)
-                        }
-            .padding(.top )
-        
+            Button(action: {
+                
+            }) {
+                NavigationLink(destination: ColourPuzzleView()) {
+                    Text("Continue")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 50)
+          
+            
         }
-        .padding()
+        .navigationTitle("Create your masterpeice")
+        .navigationBarTitleDisplayMode(.inline)
+       
+        
     }
 }
 
 #Preview {
-    PuzzleView()
+    MainTabView()
 }
 
 //import SwiftUI

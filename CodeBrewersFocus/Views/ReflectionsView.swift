@@ -2,134 +2,73 @@
 import SwiftUI
 
 struct ReflectionsView: View{
+    @State private var showSidebar = false
     @State private var reflectionText = ""
     @State private var showConfirmation = false
     @FocusState private var isTextEditorFocused: Bool
     
     var body: some View {
-        
-        VStack(alignment: .leading) {
-            // Top bar
-            HStack {
-                Image(systemName: "chevron.backward")
-                    .font(.system(size: 25))
-                    .foregroundColor(.gray)
-                Spacer()
-                Text("Reflection")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                Spacer()
-                Image(systemName: "xmark")
-                    .font(.system(size: 25))
-                    .foregroundColor(.gray)
-                    }
-            .padding(.horizontal)
-            .padding(.top, 0)
-
-            // Title with icon
-            HStack(alignment: .top, spacing: 8) {
-                Image(systemName: "bubbles.and.sparkles.fill")
-                    .font(.largeTitle)
-                Text("Tree and focus")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    }
-            .padding(.horizontal)
-            .padding(.top, 2)
-            
-            // Reflection input
-            ZStack(alignment: .topLeading){
-                TextEditor(text: $reflectionText)
-                    .frame(minHeight: 150)
-                    .padding(.horizontal)
-                    .padding(.top, 0)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.clear, lineWidth: 1)
-                            )
-                    .focused($isTextEditorFocused)
-
-                
-                if reflectionText.isEmpty {
-                    Text("Reflect on the relationship between your creation and focus")
-                        .foregroundColor(.gray)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 2)
-                        .onTapGesture {
-                            isTextEditorFocused = true
-                                    }
-                        }
-                    }
-            .contentShape(Rectangle())
-            .onTapGesture {
-                isTextEditorFocused = true
-            }
-            
-            // Save Button
-            Button(action: {
-                isTextEditorFocused = false
-                withAnimation {
-                    showConfirmation = true
-                }
-            }) {
-                Text("Save")
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(reflectionText.isEmpty ? Color.gray.opacity(0.2) : Color.blue)
-                    .foregroundColor(reflectionText.isEmpty ? .gray : .white)
-                    .cornerRadius(25)
-            }
-            .padding(.horizontal)
-            .padding(.top, 10)
-            .disabled(reflectionText.isEmpty)        }
-        .padding()
-        .overlay(
-            Group {
-                if showConfirmation {
-                    VStack(spacing: 0) {
-                        VStack(spacing: 12) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 30))
-                                .foregroundColor(.blue)
-
-                            Text("Reflection saved")
-                                .font(.headline)
-                                .bold()
-
-                            Text("Your reflections\nare yours to revisit anytime.")
-                                .font(.subheadline)
-                                .multilineTextAlignment(.center)
-                        }
-                        .padding()
-
-                        Divider()
-
+        ZStack(alignment: .leading) {
+            NavigationStack(){
+                VStack(alignment: .leading){
+                    // Top bar
+                    HStack {
                         Button(action: {
                             withAnimation {
-                                showConfirmation = false
+                                showSidebar.toggle()
                             }
-                        }) {
-                            Text("Cool!")
-                                .font(.body)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.blue)
-                                .frame(maxWidth: .infinity)
-                                .padding(12)
+                        }){
+                            Image("wave")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                                .padding(.leading, 20)
+                        }
+                        Text("Reflection")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding(.leading, 8)
+                        
+                        Spacer()
+                        
+                    }
+                    Spacer()
+                }
+                NavigationLink(destination: ExpandReflectionView()) {
+                    Text("Wave Reflection")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+            
+            .padding(.horizontal)
+            .padding(.bottom, 50)
+                
+            }
+           
+                
+        
+            if showSidebar {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            showSidebar = false
                         }
                     }
-                    .background(Color.white)
-                    .cornerRadius(16)
-                    .padding(.horizontal, 40)
-                    .shadow(radius: 10)
-                    .transition(.scale)
-                }
+                
+                SideMenuView()
+                    .frame(width: 300)
+                    .transition(.move(edge: .leading))
+                    .offset(x: showSidebar ? 0 : -260)
+                    .animation(.easeInOut, value: showSidebar)
             }
-        )
-
+        }
     }
 }
-
 #Preview {
-    ReflectionsView()
+    MainTabView()
 }
