@@ -2,14 +2,51 @@
 
 
 import SwiftUI
+import UniformTypeIdentifiers
 
-struct PuzzlePiece: Identifiable, Hashable {
-    let id = UUID()
+struct PuzzlePiece: Identifiable, Hashable, Encodable, Decodable, Transferable {
+    var id = UUID()
     let imageName: String
     var isInverted: Bool = false
     var rotation: Double = 0
     var flippedHorizontally: Bool = false
     var flippedVertically: Bool = false
+    var isPlaceholder: Bool = false
+    
+    static var transferRepresentation: some TransferRepresentation {
+            CodableRepresentation(contentType: .puzzlePiece)
+        }
+    }
+extension UTType {
+    static let puzzlePiece = UTType(exportedAs: "com.focusapp.puzzlepiece")
+    }
+
+struct PuzzleBlockView: View {
+    let piece: PuzzlePiece
+    let isSelected: Bool
+    var onTap: () -> Void
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 14)
+                .fill(piece.isInverted ? .black : Color(white: 0.9))
+            Image(piece.imageName)
+                .resizable()
+                .blendMode(piece.isInverted ? .difference : .normal)
+                .rotationEffect(.degrees(piece.rotation))
+                .scaleEffect(x: piece.flippedHorizontally ? -1 : 1, y: piece.flippedVertically ? -1 : 1)
+                .frame(width: 68, height: 68)
+        }
+        .frame(width: 68, height: 68)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(isSelected ? Color.blue : Color.clear, lineWidth: 3)
+        )
+        .scaleEffect(isSelected ? 1.05 : 1.0)
+        .onTapGesture(perform: onTap)
+        .draggable(piece)
+    }
 }
 
 struct PuzzleView: View {
@@ -28,7 +65,6 @@ struct PuzzleView: View {
     
     //For On hold shelf
     @State private var onHoldShelf: [PuzzlePiece] = []
-    
     
     var body: some View {
         VStack {
@@ -60,33 +96,74 @@ struct PuzzleView: View {
                             if index < pieces.count {
                                 let pieceBinding = $pieces[index]
                                 let piece = pieceBinding.wrappedValue
-                                
-                                let puzzleBlock = ZStack {
-                                    RoundedRectangle(cornerRadius: 14)
-                                        .fill(pieceBinding.isInverted.wrappedValue ? .black : Color(white: 0.9))
-                                    
-                                    Image(piece.imageName)
-                                        .resizable()
-                                        .blendMode(pieceBinding.isInverted.wrappedValue ? .difference : .normal)
-                                        .rotationEffect(.degrees(piece.rotation))
-                                        .scaleEffect(x: piece.flippedHorizontally ? -1 : 1, y: piece.flippedVertically ? -1 : 1)
-                                        .frame(width: 68, height: 68)
-//
+                                Group {
+                                    if piece.isPlaceholder {
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
+                                            .background(Color.clear)
+                                            .contentShape(RoundedRectangle(cornerRadius: 8))
+                                            .frame(width: 68, height: 68)
+                                            .foregroundColor(.gray.opacity(0.8))
+                                            .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
+                                                guard let droppedPiece = droppedItems.first else { return false }
+                                                if let sourceIndex = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                    // Source is puzzle
+                                                    if piece.isPlaceholder {
+                                                        // Dropping into placeholder → move
+                                                        pieces[sourceIndex] = PuzzlePiece(imageName: "", isPlaceholder: true)
+                                                        pieces[index] = droppedPiece
+                                                    } else {
+                                                        // Swap positions
+                                                        pieces.swapAt(sourceIndex, index)
+                                                    }
+                                                } else if let shelfIndex = onHoldShelf.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                    if piece.isPlaceholder {
+                                                        // Move from shelf → puzzle (remove from shelf)
+                                                        onHoldShelf.remove(at: shelfIndex)
+                                                        pieces[index] = droppedPiece
+                                                    } else {
+                                                        // Swap shelf <-> puzzle
+                                                        let current = pieces[index]
+                                                        pieces[index] = droppedPiece
+                                                        onHoldShelf[shelfIndex] = current
+                                                    }
+                                                }
+
+                                                return true
+                                            }
+                                    } else {
+                                        PuzzleBlockView(
+                                            piece: piece,
+                                            isSelected: selectedPieceID == piece.id,
+                                            onTap: { selectedPieceID = piece.id }
+                                        )
+                                        .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
+                                            guard let droppedPiece = droppedItems.first else { return false }
+
+                                            if let sourceIndex = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                pieces.swapAt(sourceIndex, index)
+                                            }
+                                            else if let shelfIndex = onHoldShelf.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                let puzzlePiece = pieces[index]
+                                                pieces[index] = droppedPiece
+                                                onHoldShelf[shelfIndex] = puzzlePiece
+                                            }
+                                            return true
+                                        }
+                                    }
                                 }
-                                
-                                puzzleBlock
-                                    .frame(width: 68, height: 68)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    .overlay(RoundedRectangle(cornerRadius: 10)
-                                        .stroke(selectedPieceID == piece.id ? Color.blue : Color.clear, lineWidth: 3)
-                                    )
-                                    .scaleEffect(selectedPieceID == piece.id ? 1.05 : 1.0)
-                                    .onTapGesture {
-                                        selectedPieceID = piece.id
+                                .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
+                                    guard let droppedPiece = droppedItems.first else { return false }
+
+                                    if let index = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                        // From puzzle to shelf → move
+                                        let realPiece = pieces[index]
+                                        onHoldShelf.append(realPiece)
+                                        pieces[index] = PuzzlePiece(imageName: "", isPlaceholder: true)
+                                        return true
                                     }
-                                    .onDrag {selectedPieceID = piece.id
-                                        return NSItemProvider(object: piece.imageName as NSString)
-                                    }
+                                    return false
+                                }
                             }
                         }
                     }
@@ -103,123 +180,169 @@ struct PuzzleView: View {
                     Text("Toolbox")
                         .font(.subheadline)
                         .foregroundColor(.black.opacity(0.6))
-                    // Spacer()
+
                     Image(systemName: "square.filled.on.square")
                         .foregroundColor(.black)
                         .opacity(isCopyFlashing ? 1.0 : 0.4)
                         .onTapGesture {
-                            if let selectedID = selectedPieceID,
-                               let originalPiece = pieces.first(where: { $0.id == selectedID }) {
-                                let copiedPiece = PuzzlePiece(imageName: originalPiece.imageName)
-                                onHoldShelf.append(copiedPiece)
-                            }
-                            
-                            // Animate opacity change
-                            withAnimation {
-                                isCopyFlashing = true
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                if let selectedID = selectedPieceID {
+                                    if let originalPiece = pieces.first(where: { $0.id == selectedID }) {
+                                        let copiedPiece = PuzzlePiece(imageName: originalPiece.imageName)
+                                        onHoldShelf.append(copiedPiece)
+                                    } else if let originalPiece = onHoldShelf.first(where: { $0.id == selectedID }) {
+                                        let copiedPiece = PuzzlePiece(imageName: originalPiece.imageName)
+                                        onHoldShelf.append(copiedPiece)
+                                    }
+                                }
+
                                 withAnimation {
-                                    isCopyFlashing = false
+                                    isCopyFlashing = true
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    withAnimation {
+                                        isCopyFlashing = false
+                                    }
                                 }
                             }
-                        }
                     
                     Image(systemName: "drop.circle.fill")
                         .foregroundColor(.black)
                         .opacity(isInvertFlashing ? 1.0 : 0.4)
                         .onTapGesture {
-                            if let selectedID = selectedPieceID,
-                               let index = pieces.firstIndex(where: { $0.id == selectedID }) {
-                                withAnimation(.easeInOut(duration: .infinity)) {
-                                    $pieces[index].isInverted.wrappedValue.toggle()
-                                    isInvertFlashing = true
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    withAnimation {
-                                        isInvertFlashing = false
+                                if let selectedID = selectedPieceID {
+                                    if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                        withAnimation(.easeInOut(duration: .infinity)) {
+                                            pieces[index].isInverted.toggle()
+                                            isInvertFlashing = true
+                                        }
+                                    } else if let index = onHoldShelf.firstIndex(where: { $0.id == selectedID }) {
+                                        withAnimation(.easeInOut(duration: .infinity)) {
+                                            onHoldShelf[index].isInverted.toggle()
+                                            isInvertFlashing = true
+                                        }
+                                    }
+
+                                    // Reset flash effect
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                        withAnimation {
+                                            isInvertFlashing = false
+                                        }
                                     }
                                 }
                             }
-                        }
                     
                     Image(systemName: "arrow.trianglehead.clockwise.rotate.90")
                         .foregroundColor(.black)
                         .opacity(isRotateRightFlashing ? 1.0 : 0.4)
                         .onTapGesture {
-                            if let selectedID = selectedPieceID,
-                               let index = pieces.firstIndex(where: { $0.id == selectedID }) {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    pieces[index].rotation += 90
-                                    if pieces[index].rotation >= 360 {
-                                        pieces[index].rotation = 0
+                                if let selectedID = selectedPieceID {
+                                    if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            pieces[index].rotation += 90
+                                            if pieces[index].rotation >= 360 {
+                                                pieces[index].rotation = 0
+                                            }
+                                            isRotateRightFlashing = true
+                                        }
+                                    } else if let index = onHoldShelf.firstIndex(where: { $0.id == selectedID }) {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            onHoldShelf[index].rotation += 90
+                                            if onHoldShelf[index].rotation >= 360 {
+                                                onHoldShelf[index].rotation = 0
+                                            }
+                                            isRotateRightFlashing = true
+                                        }
                                     }
-                                    isRotateRightFlashing = true
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    withAnimation {
-                                        isRotateRightFlashing = false
+
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                        withAnimation {
+                                            isRotateRightFlashing = false
+                                        }
                                     }
                                 }
                             }
-                        }
                     
                     Image(systemName: "arrow.trianglehead.counterclockwise.rotate.90")
                         .foregroundColor(.black)
                         .opacity(isRotateLeftFlashing ? 1.0 : 0.4)
                         .onTapGesture {
-                            if let selectedID = selectedPieceID,
-                               let index = pieces.firstIndex(where: { $0.id == selectedID }) {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    pieces[index].rotation -= 90
-                                    if pieces[index].rotation < 0 {
-                                        pieces[index].rotation += 360
+                            if let selectedID = selectedPieceID {
+                                if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        pieces[index].rotation -= 90
+                                        if pieces[index].rotation >= 360 {
+                                            pieces[index].rotation = 0
+                                            }
+                                            isRotateLeftFlashing = true
+                                        }
+                                    } else if let index = onHoldShelf.firstIndex(where: { $0.id == selectedID }) {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            onHoldShelf[index].rotation -= 90
+                                            if onHoldShelf[index].rotation >= 360 {
+                                                onHoldShelf[index].rotation = 0
+                                            }
+                                            isRotateLeftFlashing = true
+                                        }
                                     }
-                                    isRotateLeftFlashing = true
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    withAnimation {
-                                        isRotateLeftFlashing = false
+
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                        withAnimation {
+                                            isRotateLeftFlashing = false
+                                        }
                                     }
                                 }
                             }
-                        }
                     
                     Image(systemName: "arrow.trianglehead.left.and.right.righttriangle.left.righttriangle.right.fill")
                         .foregroundColor(.black)
                         .opacity(isFlipHorizontally ? 1.0 : 0.4)
                         .onTapGesture {
-                            if let selectedID = selectedPieceID,
-                               let index = pieces.firstIndex(where: { $0.id == selectedID }) {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    pieces[index].flippedHorizontally.toggle()
-                                    isFlipHorizontally = true
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    withAnimation {
-                                        isFlipHorizontally = false
+                                if let selectedID = selectedPieceID {
+                                    if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            pieces[index].flippedHorizontally.toggle()
+                                            isFlipHorizontally = true
+                                        }
+                                    } else if let index = onHoldShelf.firstIndex(where: { $0.id == selectedID }) {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            onHoldShelf[index].flippedHorizontally.toggle()
+                                            isFlipHorizontally = true
+                                        }
+                                    }
+
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                        withAnimation {
+                                            isFlipHorizontally = false
+                                        }
                                     }
                                 }
                             }
-                        }
                     
                     Image(systemName: "arrow.trianglehead.up.and.down.righttriangle.up.righttriangle.down.fill")
                         .foregroundColor(.black)
                         .opacity(isFlipVertically ? 1.0 : 0.4)
                         .onTapGesture {
-                            if let selectedID = selectedPieceID,
-                               let index = pieces.firstIndex(where: { $0.id == selectedID }) {
-                                withAnimation(.easeInOut(duration: 0.2)) {
-                                    pieces[index].flippedVertically.toggle()
-                                    isFlipVertically = true
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    withAnimation {
-                                        isFlipVertically = false
+                                if let selectedID = selectedPieceID {
+                                    if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            pieces[index].flippedVertically.toggle()
+                                            isFlipVertically = true
+                                        }
+                                    } else if let index = onHoldShelf.firstIndex(where: { $0.id == selectedID }) {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            onHoldShelf[index].flippedVertically.toggle()
+                                            isFlipVertically = true
+                                        }
+                                    }
+
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                        withAnimation {
+                                            isFlipVertically = false
+                                        }
                                     }
                                 }
                             }
-                        }
+                    
                 }
                 .padding(.vertical)
                 .padding(.horizontal)
@@ -235,33 +358,68 @@ struct PuzzleView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
                         ForEach(onHoldShelf) { piece in
-                            Image(piece.imageName)
-                                .resizable()
-                                .frame(width: 68, height: 68)
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(piece.isInverted ? .black : Color(white: 0.9))
+                                
+                                Image(piece.imageName)
+                                    .resizable()
+                                    .blendMode(piece.isInverted ? .difference : .normal)
+                                    .rotationEffect(.degrees(piece.rotation))
+                                    .scaleEffect(x: piece.flippedHorizontally ? -1 : 1,
+                                                 y: piece.flippedVertically ? -1 : 1)
+                                    .frame(width: 68, height: 68)
+                            }
+                            .frame(width: 68, height: 68)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .stroke(selectedPieceID == piece.id ? Color.blue : Color.clear, lineWidth: 3)
+                            )
+                            .scaleEffect(selectedPieceID == piece.id ? 1.05 : 1.0)
+                            .onTapGesture {
+                                selectedPieceID = piece.id
+                            }
+                            .draggable(piece)
+                            .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
+                                guard let droppedPiece = droppedItems.first else { return false }
+
+                                if let fromIndex = onHoldShelf.firstIndex(where: { $0.id == droppedPiece.id }),
+                                   let toIndex = onHoldShelf.firstIndex(where: { $0.id == piece.id }),
+                                   fromIndex != toIndex {
+                                    onHoldShelf.swapAt(fromIndex, toIndex)
+                                    return true
+                                }
+
+                                return false
+                            }
                         }
 
                         // Empty slots to drop into
                         ForEach(0..<(40 - onHoldShelf.count), id: \.self) { _ in
-                            RoundedRectangle(cornerRadius: 8)
+                            RoundedRectangle(cornerRadius: 12)
                                 .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
-                                .frame(width: 68, height: 68)
-                                .foregroundColor(.gray.opacity(0.8))
-                                .onDrop(of: [.text], isTargeted: nil) { providers in
-                                    if let provider = providers.first {
-                                        _ = provider.loadObject(ofClass: NSString.self) { object, _ in
-                                            if let name = object as? String {
-                                                DispatchQueue.main.async {
-                                                    if let droppedPiece = pieces.first(where: { $0.imageName == name }) {
-                                                        onHoldShelf.append(droppedPiece)
-                                                        pieces.removeAll { $0.id == droppedPiece.id }
-                                                    }
-                                                }
+                                    .background(Color.clear)
+                                    .contentShape(RoundedRectangle(cornerRadius: 8))
+                                    .frame(width: 68, height: 68)
+                                    .foregroundColor(.gray.opacity(0.8))
+                                    .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
+                                        guard let droppedPiece = droppedItems.first else { return false }
+
+                                        if !onHoldShelf.contains(where: { $0.id == droppedPiece.id }) {
+                                            if let index = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                let realPiece = pieces[index]
+                                                onHoldShelf.append(realPiece)
+                                                pieces[index] = PuzzlePiece(imageName: "", isPlaceholder: true)
+                                            }
+
+                                            // Replace puzzle piece with an empty slot
+                                            if let index = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                pieces[index] = PuzzlePiece(imageName: "", isPlaceholder: true)
                                             }
                                         }
                                         return true
                                     }
-                                    return false
-                                }
                         }
                     }
                     .padding(.horizontal)
