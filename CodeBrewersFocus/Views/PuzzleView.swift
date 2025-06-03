@@ -262,7 +262,7 @@ struct PuzzleView: View {
             Button(action: {
                 
             }) {
-                NavigationLink(destination: ColourPuzzleView()) {
+                NavigationLink(destination: ColourPuzzleView(pieces: pieces)) {
                     Text("Continue")
                         .frame(maxWidth: .infinity)
                         .padding()
