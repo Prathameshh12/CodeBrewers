@@ -49,7 +49,7 @@ struct ReflectionsView: View{
                 
             }
            
-                
+   
         
             if showSidebar {
                 Color.black.opacity(0.3)
