@@ -1,7 +1,4 @@
 
-
-
-
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -19,7 +16,7 @@ struct PuzzlePiece: Identifiable, Hashable, Encodable, Decodable, Transferable {
         }
     }
 extension UTType {
-    static let puzzlePiece = UTType(exportedAs: "com.focusapp.puzzlepiece")
+    static let puzzlePiece = UTType(exportedAs: "com.singular.puzzlepiece")
     }
 
 struct PuzzleBlockView: View {
@@ -51,11 +48,16 @@ struct PuzzleBlockView: View {
 }
 
 struct PuzzleView: View {
+// MARK: - For Back button
+    @Environment(\.presentationMode) var presentationMode
+    @State private var showExitPopup = false
+    
+// MARK: - For Puzzle
     @State private var pieces: [PuzzlePiece] = (1...30).map {
         PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
     }
     
-    //For tool box
+// MARK: - For tool box
     @State private var selectedPieceID: UUID? = nil
     @State private var isCopyFlashing: Bool = false
     @State private var isInvertFlashing: Bool = false
@@ -64,14 +66,13 @@ struct PuzzleView: View {
     @State private var isFlipHorizontally: Bool = false
     @State private var isFlipVertically: Bool = false
     
-    //For On hold shelf
+// MARK: - For On hold shelf
     @State private var onHoldShelf: [PuzzlePiece] = []
     
+// MARK: - Main Part
     var body: some View {
         VStack {
-            
-            
-            //Puzzle
+// MARK: - Puzzle
             VStack(spacing: 6) {
                 ForEach(0..<6) { row in
                     HStack(spacing: 6) {
@@ -93,7 +94,6 @@ struct PuzzleView: View {
                                                 if let sourceIndex = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
                                                     // Source is puzzle
                                                     if piece.isPlaceholder {
-                                                        // Dropping into placeholder → move
                                                         pieces[sourceIndex] = PuzzlePiece(imageName: "", isPlaceholder: true)
                                                         pieces[index] = droppedPiece
                                                     } else {
@@ -102,7 +102,6 @@ struct PuzzleView: View {
                                                     }
                                                 } else if let shelfIndex = onHoldShelf.firstIndex(where: { $0.id == droppedPiece.id }) {
                                                     if piece.isPlaceholder {
-                                                        // Move from shelf → puzzle (remove from shelf)
                                                         onHoldShelf.remove(at: shelfIndex)
                                                         pieces[index] = droppedPiece
                                                     } else {
@@ -112,8 +111,6 @@ struct PuzzleView: View {
                                                         onHoldShelf[shelfIndex] = current
                                                     }
                                                 }
-                                                    
-
                                                 return true
                                             }
                                     } else {
@@ -155,9 +152,9 @@ struct PuzzleView: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.top, 70)
+            .padding(.top, 30)
             
-            //Tool Box
+// MARK: - Tool Box
             ZStack{
                 Capsule()
                     .fill(Color.gray)
@@ -167,7 +164,7 @@ struct PuzzleView: View {
                     Text("Toolbox")
                         .font(.subheadline)
                         .foregroundColor(.black.opacity(0.6))
-
+// MARK: - Copy
                     Image(systemName: "square.filled.on.square")
                         .foregroundColor(.black)
                         .opacity(isCopyFlashing ? 1.0 : 0.4)
@@ -181,7 +178,6 @@ struct PuzzleView: View {
                                         onHoldShelf.append(copiedPiece)
                                     }
                                 }
-
                                 withAnimation {
                                     isCopyFlashing = true
                                 }
@@ -191,7 +187,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Invert Color
                     Image(systemName: "drop.circle.fill")
                         .foregroundColor(.black)
                         .opacity(isInvertFlashing ? 1.0 : 0.4)
@@ -208,8 +204,6 @@ struct PuzzleView: View {
                                             isInvertFlashing = true
                                         }
                                     }
-
-                                    // Reset flash effect
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                         withAnimation {
                                             isInvertFlashing = false
@@ -217,7 +211,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Clockwise Rotate
                     Image(systemName: "arrow.trianglehead.clockwise.rotate.90")
                         .foregroundColor(.black)
                         .opacity(isRotateRightFlashing ? 1.0 : 0.4)
@@ -240,7 +234,6 @@ struct PuzzleView: View {
                                             isRotateRightFlashing = true
                                         }
                                     }
-
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                         withAnimation {
                                             isRotateRightFlashing = false
@@ -248,7 +241,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Counterclockwise Rotate
                     Image(systemName: "arrow.trianglehead.counterclockwise.rotate.90")
                         .foregroundColor(.black)
                         .opacity(isRotateLeftFlashing ? 1.0 : 0.4)
@@ -271,7 +264,6 @@ struct PuzzleView: View {
                                             isRotateLeftFlashing = true
                                         }
                                     }
-
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                         withAnimation {
                                             isRotateLeftFlashing = false
@@ -279,7 +271,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Horizontal Flip
                     Image(systemName: "arrow.trianglehead.left.and.right.righttriangle.left.righttriangle.right.fill")
                         .foregroundColor(.black)
                         .opacity(isFlipHorizontally ? 1.0 : 0.4)
@@ -296,7 +288,6 @@ struct PuzzleView: View {
                                             isFlipHorizontally = true
                                         }
                                     }
-
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                         withAnimation {
                                             isFlipHorizontally = false
@@ -304,7 +295,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Vertical Flip
                     Image(systemName: "arrow.trianglehead.up.and.down.righttriangle.up.righttriangle.down.fill")
                         .foregroundColor(.black)
                         .opacity(isFlipVertically ? 1.0 : 0.4)
@@ -321,7 +312,6 @@ struct PuzzleView: View {
                                             isFlipVertically = true
                                         }
                                     }
-
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                         withAnimation {
                                             isFlipVertically = false
@@ -329,20 +319,16 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
                 }
                 .padding(.vertical)
                 .padding(.horizontal)
             }
-
-            // On hold Shelf
+// MARK: - On hold Shelf
             VStack(alignment: .leading) {
                 Text("On hold shelf")
                     .font(.subheadline)
                     .foregroundColor(.black.opacity(0.6))
                     .padding(.horizontal)
-                   .padding(.top, -8)
-                   .padding(.bottom, -8)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
@@ -414,15 +400,17 @@ struct PuzzleView: View {
                     .padding(.horizontal)
                     .padding(.top, 4)
                 }
-                ZStack {
+                HStack {
+                    Spacer()
                     Image("Shelf")
                         .resizable()
-                        .frame(width: 402, height: 25)
+                        .frame(width: 390, height: 25)
+                        .opacity(0.6)
                 }
                 .shadow(color: .black.opacity(0.45), radius: 5, x: 0, y: 4)
                 .padding(.top, -4)
             }
-            
+// MARK: - Continue Button
             Button(action: {
                 
             }) {
@@ -437,17 +425,46 @@ struct PuzzleView: View {
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom, 80)
-          
-          
+            .padding(.bottom, 20)
         }
+// MARK: - Back Button Pop-up
+        .navigationBarBackButtonHidden(true)
         .navigationTitle("Create your masterpeice")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            showExitPopup = true // Show your custom popup!
+                        }) {
+                            HStack {
+                                Image(systemName: "chevron.left")
+                                Text("Back")
+                            }
+                        }
+                    }
+                }
+        .confirmationDialog(
+                    "Leaving already?",
+                    isPresented: $showExitPopup,
+                    titleVisibility: .visible
+                ) {
+                    Button("Save draft") {
+                        // Save logic here
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    Button("Discard creation", role: .destructive) {
+                        // Discard logic here
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    Button("Cancel", role: .cancel) { }
+                } message: {
+                    Text("Focus is finishing one thing at a time.")
+                }
     }
 }
 
 #Preview {
-   MainTabView()
+    MainTabView()
 }
 
 

@@ -1,5 +1,4 @@
 
-
 import SwiftUI
 
 struct ColourPuzzleView: View{
@@ -7,9 +6,8 @@ struct ColourPuzzleView: View{
     var pieces: [PuzzlePiece]
     var body: some View {
         
-        VStack(alignment: .leading) {
-            
-    
+// MARK: - Puzzle
+        VStack {
             VStack(spacing: 6) {
                 ForEach(0..<6) { row in
                     HStack(spacing: 6) {
@@ -29,28 +27,24 @@ struct ColourPuzzleView: View{
                                 }
                                 .frame(width: 68, height: 68)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                               
                             }
-                               
                         }
                     }
-                    
                 }
-                
-               
             }
+            .padding(.horizontal)
             .padding(.top, 30)
+// MARK: - Colour Picker
             Text("Select a colour")
-                           .font(.subheadline)
-                           .padding(.top, 8)
-                           .padding(.leading)
-                         
+                .font(.subheadline)
+                .foregroundColor(.black.opacity(0.6))
+                .padding(.horizontal)
+                .padding(.top, 8)
 
             ColourPickerView(selectedColor: $selectedColor)
-            .padding(.top)
-
+                .padding(.top, -12)
             
-            
+// MARK: - Continue Button
             Button(action: {
                 
             }) {
@@ -65,16 +59,13 @@ struct ColourPuzzleView: View{
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom, 50)
+            .padding(.bottom, 20)
         }
         .navigationTitle("Colour your creation")
         .navigationBarTitleDisplayMode(.inline)
        
     }
-       
-        
     }
 #Preview {
-    
     MainTabView()
 }

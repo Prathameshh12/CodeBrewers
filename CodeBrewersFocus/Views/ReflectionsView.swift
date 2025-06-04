@@ -11,29 +11,29 @@ struct ReflectionsView: View{
         ZStack(alignment: .leading) {
             NavigationStack(){
                 VStack(alignment: .leading){
-                    // Top bar
+// MARK: - Top Bar
                     HStack {
                         Button(action: {
                             withAnimation {
                                 showSidebar.toggle()
                             }
-                        }){
-                            Image("wave")
+                        }) {
+                            Image("Puppy")
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 40, height: 40)
                                 .clipShape(Circle())
-                                .padding(.leading, 20)
                         }
-                        Text("Reflection")
-                            .font(.title)
+                        Text("Reflections")
+                            .font(.title2)
                             .fontWeight(.bold)
                             .padding(.leading, 8)
-                        
                         Spacer()
-                        
                     }
-                    Spacer()
+                    .padding(.top)
+                    .padding(.horizontal)
+                    
+                    
                 }
                 NavigationLink(destination: ExpandReflectionView()) {
                     Text("Wave Reflection")
@@ -50,7 +50,7 @@ struct ReflectionsView: View{
             }
            
    
-        
+// MARK: - Side Menu
             if showSidebar {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()

@@ -8,34 +8,33 @@ struct ExploreView: View{
             ZStack(){
                 NavigationStack(){
                 VStack(alignment: .leading){
-                    // Top bar
+// MARK: - Top Bar
                     HStack {
                         Button(action: {
                             withAnimation {
                                 showSidebar.toggle()
                             }
-                        }){
-                            Image("wave")
+                        }) {
+                            Image("Puppy")
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 40, height: 40)
                                 .clipShape(Circle())
-                                .padding(.leading, 0)
                         }
                         Text("Explore")
-                            .font(.title)
+                            .font(.title2)
                             .fontWeight(.bold)
                             .padding(.leading, 8)
-                        
                         Spacer()
-                        
                     }
-                    Spacer()
+                    .padding(.top)
+                    .padding(.horizontal)
                     
                 }
             }
         }
             .padding()
+// MARK: - Side Menu
                 if showSidebar {
                     Color.black.opacity(0.3)
                         .ignoresSafeArea()

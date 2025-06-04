@@ -1,93 +1,85 @@
 
-
 import SwiftUI
 
 struct ContentView: View {
+    var setGoToPuzzle: ((@escaping () -> Void) -> Void)? = nil
+    @Binding var showPuzzle: Bool
+    
     @State private var showSidebar = false
+    
     var body: some View {
         ZStack(alignment: .leading) {
-            ZStack {
-                NavigationStack(){
-                    VStack(alignment: .leading){
-                        HStack(){
-                            Button(action: {
-                                withAnimation {
-                                    showSidebar.toggle()
-                                }
-                            }){
-                                Image("wave")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(Circle())
-                                    .padding(.leading, 0)
-                            }
-                            
-                            
-                            Text("Mr.Puppy")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .padding(.leading, 8)
-                            
-                            Spacer()
+            Image("Spotlight")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+// MARK: - Top Bar
+                HStack {
+                    Button(action: {
+                        withAnimation {
+                            showSidebar.toggle()
                         }
-                        Spacer()
+                    }) {
+                        Image("Puppy")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
                     }
-                    
-                    
-                }
-                
-                VStack {
+                    Text("Create")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(.leading, 8)
                     Spacer()
-                    
-                    VStack(spacing: 8) {
-                        Text("Let's step into a\n mindful digital space")
-                            .font(.title)
-                            .fontWeight(.semibold)
-                            .multilineTextAlignment(.center)
-                        
-                        Text("Amazing things happen when you focus")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    
-                    Spacer()
-                    
-                    NavigationLink(destination: PuzzleView()) {
-                        ZStack {
-                            Circle()
-                                .fill(Color.blue)
-                                .frame(width: 70, height: 70)
-                            Image(systemName: "plus.app.fill")
-                                .foregroundColor(.white)
-                                .font(.system(size: 30, weight: .bold))
-                        }
-                    }
                 }
-                .padding(.bottom, 24)
+                .padding(.top)
+                .padding(.horizontal)
+// MARK: - Main Part
+                VStack (spacing: 16) {
+                    Image("Logo")
+                        .resizable()
+                        .frame(width: 120, height: 24)
+                        .opacity(0.8)
+                        .padding(.top, 140)
+                        .padding(.bottom, 100)
+                    Text("Let's step into a")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    Text("mindful digital space")
+                        .font(.largeTitle)
+                        .foregroundColor(.blue)
+                        .fontWeight(.bold)
+                        .padding(.top, -16)
+                    Text("Amazing things happen when you focus")
+                        .font(.body)
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
-            .padding()
+// MARK: - Side Menu
             if showSidebar {
-                            Color.black.opacity(0.3)
-                                .ignoresSafeArea()
-                                .onTapGesture {
-                                    withAnimation {
-                                        showSidebar = false
-                                    }
-                                }
-
-                            SideMenuView()
-                                .frame(width: 300)
-                                .transition(.move(edge: .leading))
-                                .offset(x: showSidebar ? 0 : -260)
-                                .animation(.easeInOut, value: showSidebar)
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            showSidebar = false
                         }
+                    }
+                SideMenuView()
+                    .frame(width: 300)
+                    .transition(.move(edge: .leading))
+                    .offset(x: showSidebar ? 0 : -260)
+                    .animation(.easeInOut, value: showSidebar)
+            }
+        }
+        .onAppear {
+            setGoToPuzzle?({ self.showPuzzle = true })
         }
     }
-    
-    }
+}
 
 #Preview {
     MainTabView()
 }
-
