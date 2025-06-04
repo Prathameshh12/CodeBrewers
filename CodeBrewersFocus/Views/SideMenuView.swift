@@ -19,7 +19,7 @@ struct SideMenuView: View {
                 .padding(.top, 40)
             
         }
-            NavigationLink(destination: PuzzleView()) {
+            NavigationLink(destination: ProgressView()) {
                 Text("My Progress")
             }
 

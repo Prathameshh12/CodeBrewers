@@ -154,6 +154,8 @@ struct PuzzleView: View {
                     }
                 }
             }
+            .padding(.horizontal)
+            .padding(.top, 70)
             
             //Tool Box
             ZStack{
@@ -339,6 +341,8 @@ struct PuzzleView: View {
                     .font(.subheadline)
                     .foregroundColor(.black.opacity(0.6))
                     .padding(.horizontal)
+                   .padding(.top, -8)
+                   .padding(.bottom, -8)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
@@ -424,15 +428,16 @@ struct PuzzleView: View {
             }) {
                 NavigationLink(destination: ColourPuzzleView(pieces: pieces)) {
                     Text("Continue")
+                        .fontWeight(.bold)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.blue)
                         .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .cornerRadius(25)
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom, 50)
+            .padding(.bottom, 80)
           
           
         }
@@ -442,46 +447,9 @@ struct PuzzleView: View {
 }
 
 #Preview {
-   MainTabView()
+   PuzzleView()
 }
 
-//import SwiftUI
-//
-//struct PuzzleView: View{
-//    var body: some View {
-//
-//        VStack(alignment: .leading) {
-//
-//
-//
-//
-//
-//            Button(action: {
-//
-//            }) {
-//                NavigationLink(destination: ColourPuzzleView()) {
-//                    Text("Continue")
-//                        .frame(maxWidth: .infinity)
-//                        .padding()
-//                        .background(Color.blue)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(12)
-//                }
-//            }
-//            .padding(.horizontal)
-//            .padding(.top, 600)
-//        }
-//        .navigationTitle("Create your masterpeice")
-//        .navigationBarTitleDisplayMode(.inline)
-//    }
-//
-//
-//    }
-//#Preview {
-//
-//    PuzzleView()
-//}
-//
 
 
 
