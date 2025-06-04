@@ -1,6 +1,7 @@
 
 
 
+
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -68,24 +69,7 @@ struct PuzzleView: View {
     
     var body: some View {
         VStack {
-            // Top bar
-            HStack {
-                Spacer()
-                ZStack {
-                    Text("Create your masterpiece")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                    HStack {
-                        Spacer()
-                        Image(systemName: "xmark")
-                            .font(.system(size: 20))
-                            .fontWeight(.semibold)
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-            .padding(.top, 0)
-            .padding(.bottom, 20)
+            
             
             //Puzzle
             VStack(spacing: 6) {
@@ -128,6 +112,7 @@ struct PuzzleView: View {
                                                         onHoldShelf[shelfIndex] = current
                                                     }
                                                 }
+                                                    
 
                                                 return true
                                             }
@@ -434,40 +419,45 @@ struct PuzzleView: View {
                 .padding(.top, -4)
             }
             
-            //Continue Button
-            Button(action: {}) {
-                            Text("Continue")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.gray.opacity(0.3))
-                                .foregroundColor(.gray)
-                                .cornerRadius(20)
-                                .fontWeight(.semibold)
-                        }
-            .padding(.top )
-        
+            Button(action: {
+                
+            }) {
+                NavigationLink(destination: ColourPuzzleView(pieces: pieces)) {
+                    Text("Continue")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 50)
+          
+          
         }
-        .padding()
+        .navigationTitle("Create your masterpeice")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
-    PuzzleView()
+   MainTabView()
 }
 
 //import SwiftUI
 //
 //struct PuzzleView: View{
 //    var body: some View {
-//        
+//
 //        VStack(alignment: .leading) {
-//            
-//            
-//            
-//            
-//            
+//
+//
+//
+//
+//
 //            Button(action: {
-//                
+//
 //            }) {
 //                NavigationLink(destination: ColourPuzzleView()) {
 //                    Text("Continue")
@@ -484,11 +474,14 @@ struct PuzzleView: View {
 //        .navigationTitle("Create your masterpeice")
 //        .navigationBarTitleDisplayMode(.inline)
 //    }
-//       
-//        
+//
+//
 //    }
 //#Preview {
-//    
+//
 //    PuzzleView()
 //}
 //
+
+
+
