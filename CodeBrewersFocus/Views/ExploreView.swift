@@ -2,33 +2,62 @@
 import SwiftUI
 
 struct ExploreView: View{
+    @State private var showSidebar = false
     var body: some View {
-        
-        NavigationStack(){
-            VStack(alignment: .leading){
-                HStack(){
-                    Image("wave")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 40, height: 40)
-                        .clipShape(Circle())
-                        .padding(.leading, 16)
+        ZStack(alignment: .leading) {
+            ZStack(){
+                NavigationStack(){
+                VStack(alignment: .leading){
+                    // Top bar
+                    HStack {
+                        Button(action: {
+                            withAnimation {
+                                showSidebar.toggle()
+                            }
+                        }){
+                            Image("wave")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                                .padding(.leading, 0)
+                        }
+                        Text("Explore")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding(.leading, 8)
                         
-                    
-                    
-                    Text("Explore")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.leading, 8)
-                    
+                        Spacer()
+                        
+                    }
                     Spacer()
+                    
                 }
-                Spacer()
-            }
-         
-                
             }
         }
-       
+            .padding()
+                if showSidebar {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation {
+                                showSidebar = false
+                            }
+                        }
+                    
+                    SideMenuView()
+                        .frame(width: 300)
+                        .transition(.move(edge: .leading))
+                        .offset(x: showSidebar ? 0 : -260)
+                        .animation(.easeInOut, value: showSidebar)
+                }
+            }
+            
+        }
+        
         
     }
+#Preview {
+    MainTabView()
+}
+

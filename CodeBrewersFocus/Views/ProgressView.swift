@@ -1,9 +1,11 @@
+
 //
 //  ContentView.swift
 //  Progress Page
 //
 //  Created by Lia Pereira Dullius on 3/6/2025.
 //
+
 
 import SwiftUI
 
