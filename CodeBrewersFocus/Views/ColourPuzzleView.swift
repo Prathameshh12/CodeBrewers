@@ -56,11 +56,12 @@ struct ColourPuzzleView: View{
             }) {
                 NavigationLink(destination: WriteReflectionView()) {
                     Text("Continue")
+                        .fontWeight(.bold)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.blue)
                         .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .cornerRadius(25)
                 }
             }
             .padding(.horizontal)
