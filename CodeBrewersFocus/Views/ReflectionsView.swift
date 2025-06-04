@@ -9,47 +9,49 @@ struct ReflectionsView: View{
     
     var body: some View {
         ZStack(alignment: .leading) {
-            NavigationStack(){
-                VStack(alignment: .leading){
-                    // Top bar
-                    HStack {
-                        Button(action: {
-                            withAnimation {
-                                showSidebar.toggle()
+            ZStack(){
+                NavigationStack(){
+                    VStack(alignment: .leading){
+                        // Top bar
+                        HStack {
+                            Button(action: {
+                                withAnimation {
+                                    showSidebar.toggle()
+                                }
+                            }){
+                                Image("logo")
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Rectangle())
+                                    .padding(.leading, 20)
                             }
-                        }){
-                            Image("wave")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40)
-                                .clipShape(Circle())
-                                .padding(.leading, 20)
+                            Text("Reflection")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .padding(.leading, 8)
+                            
+                            Spacer()
+                            
                         }
-                        Text("Reflection")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .padding(.leading, 8)
-                        
                         Spacer()
-                        
                     }
-                    Spacer()
+                    NavigationLink(destination: ExpandReflectionView()) {
+                        Text("Wave Reflection")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                    }
+                    
+                    .padding(.horizontal)
+                    .padding(.bottom, 50)
+                    
                 }
-                NavigationLink(destination: ExpandReflectionView()) {
-                    Text("Wave Reflection")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                }
-            
-            .padding(.horizontal)
-            .padding(.bottom, 50)
-                
             }
            
-   
+            .padding()
         
             if showSidebar {
                 Color.black.opacity(0.3)

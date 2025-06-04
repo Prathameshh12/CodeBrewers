@@ -15,11 +15,11 @@ struct ContentView: View {
                                     showSidebar.toggle()
                                 }
                             }){
-                                Image("wave")
+                                Image("logo")
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(Circle())
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Rectangle())
                                     .padding(.leading, 0)
                             }
                             
@@ -61,7 +61,9 @@ struct ContentView: View {
                             Image(systemName: "plus.app.fill")
                                 .foregroundColor(.white)
                                 .font(.system(size: 30, weight: .bold))
+                                
                         }
+                        
                     }
                 }
                 .padding(.bottom, 24)

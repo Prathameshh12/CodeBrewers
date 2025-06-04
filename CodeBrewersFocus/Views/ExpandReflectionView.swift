@@ -2,47 +2,69 @@
 import SwiftUI
 
 struct ExpandReflectionView: View {
+    @State private var isVisibleInExplore = true
     var body: some View {
-        ZStack {
-            LinearGradient(gradient: Gradient(colors: [Color.gray, Color.white]), startPoint: .top, endPoint: .bottom)
-            VStack{
-                Text("March 12, 2025 5")
-                Text("Wave")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                HStack{
-                    Button("Flow") {
-                    }
-                    .foregroundStyle(Color.black)
-                    .buttonStyle(BorderedProminentButtonStyle())
-                    .tint(Color.white)
-                    Button("Adaptability") {
-                    }
-                    .foregroundStyle(Color.black)
-                    .buttonStyle(BorderedProminentButtonStyle())
-                    .tint(Color.white)
-                }
-            
         
-                HStack{
-                    Toggle(isOn: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Is On@*/.constant(true)/*@END_MENU_TOKEN@*/) {
+        ScrollView{
+            ZStack {
+                
+                VStack{
+                    Text("March 12, 2025")
+                        .padding(.bottom, -10)
+                    Text("Wave")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding()
+                    HStack(spacing: 10) {
+                        Text("Flow")
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.gray.opacity(0.2))
+                            .foregroundColor(.black)
+                            .cornerRadius(20)
+                        
+                        Text("Adaptability")
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.gray.opacity(0.2))
+                            .foregroundColor(.black)
+                            .cornerRadius(20)
                     }
-                    .padding(.horizontal, 50)
-                    Text("Visible in Explore")
-                        .padding(.horizontal, 20)
+                
+                    Spacer()
+                    
+                    
+                    HStack{
+                        Toggle("Visible in Explore", isOn: $isVisibleInExplore)
+                            .toggleStyle(SwitchToggleStyle(tint: .green))
+                            .foregroundColor(.black)
+                            
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                   
+                    
+                    VStack(alignment: .leading, spacing: 8){
+                        Text("Your Reflection")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        
+                        Text("I realise that focus isn’t about holding still. It’s about flowing steadily in one direction, like a wave. I want to stay in the flow and not get distracted by everything around me.")
+                            .font(.body)
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                    
                 }
-                Text("Your Reflection")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                Text("I realise that focus isn’t about holding still. It’s about flowing steadily in one direction, like a wave. I want to stay in the flow and not get distracted by everything around me.")
-
+                
+                
+                
             }
-                          
         }
-        .padding()
+       
     }
 }
 
 #Preview {
-    ExpandReflectionView()
+    MainTabView()
 }

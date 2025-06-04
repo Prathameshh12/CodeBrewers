@@ -417,7 +417,7 @@ struct PuzzleView: View {
                 ZStack {
                     Image("Shelf")
                         .resizable()
-                        .frame(width: 402, height: 25)
+                        .frame(width: 402, height: 15)
                 }
                 .shadow(color: .black.opacity(0.45), radius: 5, x: 0, y: 4)
                 .padding(.top, -4)
@@ -447,7 +447,7 @@ struct PuzzleView: View {
 }
 
 #Preview {
-   PuzzleView()
+   MainTabView()
 }
 
 

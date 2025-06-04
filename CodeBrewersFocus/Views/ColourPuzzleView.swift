@@ -18,14 +18,26 @@ struct ColourPuzzleView: View{
                             if index < pieces.count {
                                 let piece = pieces[index]
                                 ZStack {
-                                    Image(piece.imageName)
-                                        .resizable()
-                                        .blendMode(piece.isInverted ? .difference : .normal)
-                                        .rotationEffect(.degrees(piece.rotation))
-                                        .scaleEffect(x: piece.flippedHorizontally ? -1 : 1, y: piece.flippedVertically ? -1 : 1)
-                                        .frame(width: 68, height: 68)
-                                    RoundedRectangle(cornerRadius: 14)
-                                        .fill(selectedColor.opacity(0.3))
+                                    if !piece.isPlaceholder {
+                                        Image(piece.imageName)
+                                            .resizable()
+                                            .blendMode(piece.isInverted ? .difference : .normal)
+                                            .rotationEffect(.degrees(piece.rotation))
+                                            .scaleEffect(
+                                                x: piece.flippedHorizontally ? -1 : 1,
+                                                y: piece.flippedVertically ? -1 : 1
+                                            )
+                                            .frame(width: 68, height: 68)
+                                        
+                                        // Only apply the colour overlay if it’s a real piece
+                                        RoundedRectangle(cornerRadius: 14)
+                                            .fill(selectedColor.opacity(0.3))
+                                    } else {
+                                        // For placeholders, you might show an empty or dashed border
+                                        RoundedRectangle(cornerRadius: 14)
+                                            .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))
+                                            .foregroundColor(.gray.opacity(0.8))
+                                    }
                                 }
                                 .frame(width: 68, height: 68)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -65,7 +77,7 @@ struct ColourPuzzleView: View{
                 }
             }
             .padding(.horizontal)
-            .padding(.bottom, 50)
+            .padding(.top, 10)
         }
         .navigationTitle("Colour your creation")
         .navigationBarTitleDisplayMode(.inline)
