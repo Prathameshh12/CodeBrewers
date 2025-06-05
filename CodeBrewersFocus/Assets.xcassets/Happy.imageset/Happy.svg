@@ -1,0 +1,42 @@
+<svg width="320" height="430" viewBox="0 0 320 430" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2150_4803)">
+<rect y="110" width="99.75" height="99.8" rx="12" fill="#FFFAA0"/>
+<path d="M49.8801 186.47C64.5543 186.47 76.4501 174.574 76.4501 159.9C76.4501 145.226 64.5543 133.33 49.8801 133.33C35.2059 133.33 23.3101 145.226 23.3101 159.9C23.3101 174.574 35.2059 186.47 49.8801 186.47Z" fill="#FFCC00"/>
+</g>
+<g clip-path="url(#clip1_2150_4803)">
+<rect x="220" y="110" width="99.75" height="99.8" rx="12" fill="#FFFAA0"/>
+<path d="M269.88 186.47C284.554 186.47 296.45 174.574 296.45 159.9C296.45 145.226 284.554 133.33 269.88 133.33C255.206 133.33 243.31 145.226 243.31 159.9C243.31 174.574 255.206 186.47 269.88 186.47Z" fill="#FFCC00"/>
+</g>
+<rect x="110" y="220" width="100" height="100" rx="12" fill="#FFFAA0"/>
+<path d="M136.3 220.1L160 319.9L185.78 220.1H136.3Z" fill="#FFCC00"/>
+<g clip-path="url(#clip2_2150_4803)">
+<rect x="320" y="100" width="100" height="100" rx="12" transform="rotate(-180 320 100)" fill="#FFFAA0"/>
+<path d="M245.8 73.25C236.55 73.25 227.83 75.46 220.1 79.37L220.1 99.87L294.05 99.87C283.94 83.87 266.12 73.24 245.8 73.24L245.8 73.25Z" fill="#FFCC00"/>
+</g>
+<g clip-path="url(#clip3_2150_4803)">
+<rect width="100" height="100" rx="12" transform="matrix(1 -8.74228e-08 -8.74228e-08 -1 0 100)" fill="#FFFAA0"/>
+<path d="M74.2002 73.25C83.4502 73.25 92.1702 75.46 99.9002 79.37L99.9002 99.87L25.9502 99.87C36.0602 83.87 53.8802 73.24 74.2002 73.24L74.2002 73.25Z" fill="#FFCC00"/>
+</g>
+<rect x="110" y="110" width="100" height="100" rx="12" fill="#FFFAA0"/>
+<g clip-path="url(#clip4_2150_4803)">
+<rect x="110" y="330" width="100" height="100" rx="12" fill="#FFFAA0"/>
+<path d="M159.69 413.63C191.198 413.63 216.74 388.088 216.74 356.58C216.74 325.072 191.198 299.53 159.69 299.53C128.182 299.53 102.64 325.072 102.64 356.58C102.64 388.088 128.182 413.63 159.69 413.63Z" fill="#FFCC00"/>
+</g>
+<defs>
+<clipPath id="clip0_2150_4803">
+<rect y="110" width="99.75" height="99.8" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip1_2150_4803">
+<rect x="220" y="110" width="99.75" height="99.8" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip2_2150_4803">
+<rect x="320" y="100" width="100" height="100" rx="12" transform="rotate(-180 320 100)" fill="white"/>
+</clipPath>
+<clipPath id="clip3_2150_4803">
+<rect width="100" height="100" rx="12" transform="matrix(1 -8.74228e-08 -8.74228e-08 -1 0 100)" fill="white"/>
+</clipPath>
+<clipPath id="clip4_2150_4803">
+<rect x="110" y="330" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+</defs>
+</svg>
