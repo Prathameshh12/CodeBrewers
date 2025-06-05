@@ -1,6 +1,8 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import Foundation
+
 
 struct PuzzlePiece: Identifiable, Hashable, Encodable, Decodable, Transferable {
     var id = UUID()
@@ -48,6 +50,11 @@ struct PuzzleBlockView: View {
 }
 
 struct PuzzleView: View {
+    
+// for draft saving
+    @State private var showingSaveAlert = false
+    @State private var showSavedMessage = false
+
 // MARK: - For Back button
     @Environment(\.presentationMode) var presentationMode
     @State private var showExitPopup = false
@@ -71,7 +78,9 @@ struct PuzzleView: View {
     
 // MARK: - Main Part
     var body: some View {
+        
         VStack {
+            
 // MARK: - Puzzle
             VStack(spacing: 6) {
                 ForEach(0..<6) { row in
@@ -153,6 +162,12 @@ struct PuzzleView: View {
                         }
                     }
                 }
+                // for draft saving
+                .onAppear {
+                        if let saved = PuzzleDraftManager.shared.loadDraft() {
+                            self.pieces = saved
+                        }
+                    }
             }
             .padding(.horizontal)
             .padding(.top, 30)
@@ -461,10 +476,12 @@ struct PuzzleView: View {
                 ) {
                     Button("Save draft") {
                         // Save logic here
+                        PuzzleDraftManager.shared.saveDraft(pieces)
                         presentationMode.wrappedValue.dismiss()
                     }
                     Button("Discard creation", role: .destructive) {
                         // Discard logic here
+                        PuzzleDraftManager.shared.clearDraft()
                         presentationMode.wrappedValue.dismiss()
                     }
                     Button("Cancel", role: .cancel) { }

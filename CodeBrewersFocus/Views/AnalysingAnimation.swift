@@ -29,7 +29,7 @@ struct AnalysingAnimation: View {
 // >>>>>>>Here we need to substitute for the AI Analysis Screen when we have it done <<<<<<<
             .navigationDestination(for: String.self) { value in
                 if value == "write" {
-                    WriteReflectionView()
+                    AnalysisView()
                 }
             }
         }

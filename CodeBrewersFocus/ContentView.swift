@@ -24,13 +24,13 @@ struct ContentView: View {
                             showSidebar.toggle()
                         }
                     }) {
-                        Image("Puppy")
+                        Image("applogo")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 40, height: 40)
-                            .clipShape(Circle())
+                            .clipShape(Rectangle())
                     }
-                    Text("Create")
+                    Text("")
                         .font(.title2)
                         .fontWeight(.bold)
                         .padding(.leading, 8)
