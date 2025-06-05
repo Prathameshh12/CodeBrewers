@@ -55,18 +55,17 @@ struct ExploreView: View {
             let totalSpacing = spacing * CGFloat(columnsCount - 1)
             let itemWidth = (geometry.size.width - totalSpacing - 35) / CGFloat(columnsCount)
             VStack(alignment: .leading) {
-// MARK: -  Header
+// MARK: -  Top Bar
                 HStack {
                     Button(action: {
                         withAnimation {
                             showSidebar.toggle()
                         }
                     }) {
-                        Image("Puppy")
+                        Image("LogoBlock")
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
+                            .frame(width: 30, height: 30)
                     }
                     Text("Explore")
                         .font(.title2)
@@ -107,10 +106,9 @@ struct ExploreView: View {
                     }
                     .padding()
                 }
-                Spacer()
+                .padding(.bottom, 160)
             }
         }
-//        .searchable(text: $searchText, prompt: "Search images")
 // MARK: - Side Menu
         if showSidebar {
             Color.black.opacity(0.3)
@@ -131,5 +129,5 @@ struct ExploreView: View {
 }
 
 #Preview {
-    ExploreView()
+    MainTabView()
 }

@@ -4,6 +4,7 @@ import SwiftUI
 // I did something
 
 struct ContentView: View {
+    
     var setGoToPuzzle: ((@escaping () -> Void) -> Void)? = nil
     @Binding var showPuzzle: Bool
     
@@ -24,13 +25,12 @@ struct ContentView: View {
                             showSidebar.toggle()
                         }
                     }) {
-                        Image("Puppy")
+                        Image("LogoBlock")
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
+                            .frame(width: 30, height: 30)
                     }
-                    Text("Create")
+                    Text("Singular")
                         .font(.title2)
                         .fontWeight(.bold)
                         .padding(.leading, 8)
@@ -39,13 +39,8 @@ struct ContentView: View {
                 .padding(.top)
                 .padding(.horizontal)
 // MARK: - Main Part
-                VStack (spacing: 16) {
-                    Image("Logo")
-                        .resizable()
-                        .frame(width: 120, height: 24)
-                        .opacity(0.8)
-                        .padding(.top, 140)
-                        .padding(.bottom, 100)
+                VStack {
+                    Spacer()
                     Text("Let's step into a")
                         .font(.largeTitle)
                         .fontWeight(.bold)
@@ -56,8 +51,10 @@ struct ContentView: View {
                         .padding(.top, -16)
                     Text("Amazing things happen when you focus")
                         .font(.body)
+                        .padding(.top, 2)
                     Spacer()
                 }
+                .padding(.bottom, 180)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             }
 // MARK: - Side Menu
