@@ -1,6 +1,4 @@
 
-
-
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -18,7 +16,7 @@ struct PuzzlePiece: Identifiable, Hashable, Encodable, Decodable, Transferable {
         }
     }
 extension UTType {
-    static let puzzlePiece = UTType(exportedAs: "com.focusapp.puzzlepiece")
+    static let puzzlePiece = UTType(exportedAs: "com.singular.puzzlepiece")
     }
 
 struct PuzzleBlockView: View {
@@ -50,11 +48,16 @@ struct PuzzleBlockView: View {
 }
 
 struct PuzzleView: View {
+// MARK: - For Back button
+    @Environment(\.presentationMode) var presentationMode
+    @State private var showExitPopup = false
+    
+// MARK: - For Puzzle
     @State private var pieces: [PuzzlePiece] = (1...30).map {
         PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
     }
     
-    //For tool box
+// MARK: - For tool box
     @State private var selectedPieceID: UUID? = nil
     @State private var isCopyFlashing: Bool = false
     @State private var isInvertFlashing: Bool = false
@@ -63,31 +66,13 @@ struct PuzzleView: View {
     @State private var isFlipHorizontally: Bool = false
     @State private var isFlipVertically: Bool = false
     
-    //For On hold shelf
+// MARK: - For On hold shelf
     @State private var onHoldShelf: [PuzzlePiece] = []
     
+// MARK: - Main Part
     var body: some View {
         VStack {
-            // Top bar
-            HStack {
-                Spacer()
-                ZStack {
-                    Text("Create your masterpiece")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                    HStack {
-                        Spacer()
-                        Image(systemName: "xmark")
-                            .font(.system(size: 20))
-                            .fontWeight(.semibold)
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-            .padding(.top, 0)
-            .padding(.bottom, 20)
-            
-            //Puzzle
+// MARK: - Puzzle
             VStack(spacing: 6) {
                 ForEach(0..<6) { row in
                     HStack(spacing: 6) {
@@ -169,8 +154,10 @@ struct PuzzleView: View {
                     }
                 }
             }
+            .padding(.horizontal)
+            .padding(.top, 30)
             
-            //Tool Box
+// MARK: - Tool Box
             ZStack{
                 Capsule()
                     .fill(Color.gray)
@@ -180,7 +167,7 @@ struct PuzzleView: View {
                     Text("Toolbox")
                         .font(.subheadline)
                         .foregroundColor(.black.opacity(0.6))
-
+// MARK: - Copy
                     Image(systemName: "square.filled.on.square")
                         .foregroundColor(.black)
                         .opacity(isCopyFlashing ? 1.0 : 0.4)
@@ -204,7 +191,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Invert Color
                     Image(systemName: "drop.circle.fill")
                         .foregroundColor(.black)
                         .opacity(isInvertFlashing ? 1.0 : 0.4)
@@ -230,7 +217,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Clockwise Rotate
                     Image(systemName: "arrow.trianglehead.clockwise.rotate.90")
                         .foregroundColor(.black)
                         .opacity(isRotateRightFlashing ? 1.0 : 0.4)
@@ -261,7 +248,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Counterclockwise Rotate
                     Image(systemName: "arrow.trianglehead.counterclockwise.rotate.90")
                         .foregroundColor(.black)
                         .opacity(isRotateLeftFlashing ? 1.0 : 0.4)
@@ -292,7 +279,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Horizontal Flip
                     Image(systemName: "arrow.trianglehead.left.and.right.righttriangle.left.righttriangle.right.fill")
                         .foregroundColor(.black)
                         .opacity(isFlipHorizontally ? 1.0 : 0.4)
@@ -317,7 +304,7 @@ struct PuzzleView: View {
                                     }
                                 }
                             }
-                    
+// MARK: - Vertical Flip
                     Image(systemName: "arrow.trianglehead.up.and.down.righttriangle.up.righttriangle.down.fill")
                         .foregroundColor(.black)
                         .opacity(isFlipVertically ? 1.0 : 0.4)
@@ -347,8 +334,7 @@ struct PuzzleView: View {
                 .padding(.vertical)
                 .padding(.horizontal)
             }
-
-            // On hold Shelf
+// MARK: - On hold Shelf
             VStack(alignment: .leading) {
                 Text("On hold shelf")
                     .font(.subheadline)
@@ -425,70 +411,73 @@ struct PuzzleView: View {
                     .padding(.horizontal)
                     .padding(.top, 4)
                 }
-                ZStack {
+                HStack {
+                    Spacer()
                     Image("Shelf")
                         .resizable()
-                        .frame(width: 402, height: 25)
+                        .frame(width: 390, height: 25)
+                        .opacity(0.6)
                 }
                 .shadow(color: .black.opacity(0.45), radius: 5, x: 0, y: 4)
                 .padding(.top, -4)
             }
-            
-            //Continue Button
-            Button(action: {}) {
-                            Text("Continue")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.gray.opacity(0.3))
-                                .foregroundColor(.gray)
-                                .cornerRadius(20)
-                                .fontWeight(.semibold)
-                        }
-            .padding(.top )
-        
+// MARK: - Continue Button
+            Button(action: {
+                
+            }) {
+                NavigationLink(destination: ColourPuzzleView(pieces: pieces)) {
+                    Text("Continue")
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(25)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 20)
         }
-        .padding()
+// MARK: - Back Button Pop-up
+        .navigationBarBackButtonHidden(true)
+        .navigationTitle("Create your masterpeice")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            showExitPopup = true // Show your custom popup!
+                        }) {
+                            HStack {
+                                Image(systemName: "chevron.left")
+                                Text("Back")
+                            }
+                        }
+                    }
+                }
+        .confirmationDialog(
+                    "Leaving already?",
+                    isPresented: $showExitPopup,
+                    titleVisibility: .visible
+                ) {
+                    Button("Save draft") {
+                        // Save logic here
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    Button("Discard creation", role: .destructive) {
+                        // Discard logic here
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    Button("Cancel", role: .cancel) { }
+                } message: {
+                    Text("Focus is finishing one thing at a time.")
+                }
     }
 }
 
 #Preview {
-    PuzzleView()
+    MainTabView()
 }
 
-//import SwiftUI
-//
-//struct PuzzleView: View{
-//    var body: some View {
-//        
-//        VStack(alignment: .leading) {
-//            
-//            
-//            
-//            
-//            
-//            Button(action: {
-//                
-//            }) {
-//                NavigationLink(destination: ColourPuzzleView()) {
-//                    Text("Continue")
-//                        .frame(maxWidth: .infinity)
-//                        .padding()
-//                        .background(Color.blue)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(12)
-//                }
-//            }
-//            .padding(.horizontal)
-//            .padding(.top, 600)
-//        }
-//        .navigationTitle("Create your masterpeice")
-//        .navigationBarTitleDisplayMode(.inline)
-//    }
-//       
-//        
-//    }
-//#Preview {
-//    
-//    PuzzleView()
-//}
-//
+
+
+

@@ -6,52 +6,74 @@
 //
 import SwiftUI
 
-struct FavoriteItem: Identifiable {
-    let id = UUID()
-    let imageName: String
-    let name: String
-    let desc: String
-    let date: Date
-}
-struct ReflectionsView: View {
-    @State private var items: [FavoriteItem] = [
-        FavoriteItem(imageName: "tree", name: "Tree", desc: "Resilience & Growth", date: Date()),
-        FavoriteItem(imageName: "icecream",name: "Ice Cream", desc: "Living Moments & Letting Go", date: Date()),
-        FavoriteItem(imageName: "heart", name: "Heart", desc: "Centeredness & Steadiness", date: Date()),
-        FavoriteItem(imageName: "frog", name: "Frog", desc: "Leap & Change",date: Date()),
-        FavoriteItem(imageName: "happy", name: "Happy Face", desc: "Calm & Positivity",date: Date()),
-        FavoriteItem(imageName: "strawberry", name: "Strawberyy", desc: "Nourishment & Vitality",date: Date())
-    ]
+struct ReflectionsView: View{
+    @State private var showSidebar = false
+    @State private var reflectionText = ""
+    @State private var showConfirmation = false
+    @FocusState private var isTextEditorFocused: Bool
+    
     var body: some View {
-        NavigationView {
-            Form{
-                    ForEach($items) { $item in
-                        HStack(spacing : 10){
-                            Image(item.imageName)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 70, height: 70)
-                            VStack (alignment: .leading){
-                                Spacer()
-                                Text(item.name)
-                                Text(item.desc)
-                                    .foregroundColor(.gray)
-                                Text(item.date, style: .date)
-                                    .foregroundColor(.gray)
-                                    .font(.footnote)
-                                Spacer()
+        ZStack(alignment: .leading) {
+            NavigationStack(){
+                VStack(alignment: .leading){
+// MARK: - Top Bar
+                    HStack {
+                        Button(action: {
+                            withAnimation {
+                                showSidebar.toggle()
                             }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .padding(.horizontal)
-                                .foregroundColor(.gray)
+                        }) {
+                            Image("Puppy")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                        }
+                        Text("Reflections")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding(.leading, 8)
+                        Spacer()
+                    }
+                    .padding(.top)
+                    .padding(.horizontal)
+                    
+                    
+                }
+                NavigationLink(destination: ExpandReflectionView()) {
+                    Text("Wave Reflection")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+            
+            .padding(.horizontal)
+            .padding(.bottom, 50)
+                
+            }
+           
+   
+// MARK: - Side Menu
+            if showSidebar {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            showSidebar = false
                         }
                     }
+                
+                SideMenuView()
+                    .frame(width: 300)
+                    .transition(.move(edge: .leading))
+                    .offset(x: showSidebar ? 0 : -260)
+                    .animation(.easeInOut, value: showSidebar)
             }
-            .navigationTitle("Reflections")
         }
     }
 }
 #Preview {
-    ReflectionsView()
+    MainTabView()
 }

@@ -9,22 +9,7 @@ struct WriteReflectionView: View{
     var body: some View {
         
         VStack(alignment: .leading) {
-            // Top bar
-            HStack {
-                Image(systemName: "chevron.backward")
-                    .font(.system(size: 25))
-                    .foregroundColor(.gray)
-                Spacer()
-                Text("Reflection")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                Spacer()
-                Image(systemName: "xmark")
-                    .font(.system(size: 25))
-                    .foregroundColor(.gray)
-                    }
-            .padding(.horizontal)
-            .padding(.top, 0)
+            
 
             // Title with icon
             HStack(alignment: .top, spacing: 8) {
@@ -110,6 +95,7 @@ struct WriteReflectionView: View{
                                 showConfirmation = false
                             }
                         }) {
+                            
                             Text("Cool!")
                                 .font(.body)
                                 .fontWeight(.semibold)
@@ -126,6 +112,8 @@ struct WriteReflectionView: View{
                 }
             }
         )
+        .navigationTitle("Reflection")
+        .navigationBarTitleDisplayMode(.inline)
 
     }
 }
