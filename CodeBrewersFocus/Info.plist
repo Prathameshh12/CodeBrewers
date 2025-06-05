@@ -10,13 +10,18 @@
 				<string>public.data</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Puzzle Piece</string>
+			<string>puzzlepiece</string>
 			<key>UTTypeIconFiles</key>
 			<array/>
 			<key>UTTypeIdentifier</key>
 			<string>com.singular.puzzlepiece</string>
 			<key>UTTypeTagSpecification</key>
-			<dict/>
+			<dict>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/puzzlepiece</string>
+				</array>
+			</dict>
 		</dict>
 	</array>
 </dict>
