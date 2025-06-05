@@ -4,6 +4,7 @@ import SwiftUI
 struct ExpandReflectionView: View {
     
     let item: FavoriteItem
+    @State private var isVisibleInExplore = true
     
     var body: some View {
         ZStack {
@@ -13,7 +14,7 @@ struct ExpandReflectionView: View {
                     .scaledToFill()
                     .ignoresSafeArea()
             }
-// MARK: - Top Bar
+// MARK: - Main Part
             VStack (spacing: 20){
                 
                 Text(item.name)
@@ -57,20 +58,25 @@ struct ExpandReflectionView: View {
                             .frame(height: 300)
                             .frame(maxWidth: 200)
                         HStack{
-                            Toggle(isOn: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Is On@*/.constant(true)/*@END_MENU_TOKEN@*/) {
-                                
-                            }
+                            Toggle("", isOn: $isVisibleInExplore)
+                                .labelsHidden()
                             Text("Visible in Explore")
                                 .font(.body)
                         }
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.top, 20)
+                        .padding(.bottom, 20)
+                
+                        .frame(maxWidth: .infinity, alignment: .center)
                         HStack{
                             Text("Your reflection")
                                 .font(.title)
                                 .fontWeight(.bold)
+                                .padding(.horizontal)
                             Spacer()
                         }
                         Text(item.reflect)
+                            .padding(.horizontal)
                     }
                 }
                 .padding(.top, 40)
@@ -86,9 +92,3 @@ struct ExpandReflectionView: View {
 #Preview {
     MainTabView()
 }
-
-//#Preview {
-//    ExpandReflectionView(item: FavoriteItem(
-//        imageName: "Tree", name: "Tree", desc: "Resilience and growth", date: "12 March 2025", tag1: "Resilience", tag2: "Growth", reflect: "I realise that focus isn’t about holding still. It’s about flowing steadily in one direction, like a wave. I want to stay in the flow and not get distracted by everything around me."
-//    ))
-//}

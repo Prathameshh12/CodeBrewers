@@ -1,49 +1,60 @@
 import SwiftUI
-
-struct AnalysingAnimation: View {
-    @State private var path: [String] = []
-
-    var body: some View {
-        NavigationStack(path: $path) {
-            ZStack {
-                
-// >>>>>>>Here we need to substitute for the previous screen!! <<<<<<<<<
-                Image("Example-Analysing-Screen")
-                
-// Blur layer
-                Color.white.opacity(0.6)
-                    .background(.ultraThinMaterial)
-                    .ignoresSafeArea()
+// MARK: - Creating Snapshot of previous page
+struct ColourPuzzleSnapshot: View {
+    @EnvironmentObject var session: PuzzleSession
     
-//Animation
-                PuzzleAnimation()
-            }
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now()) {
-                    runFullCycle {
-                        path.append("write")
+    var body: some View {
+        VStack(spacing: 6) {
+            ForEach(0..<6) { row in
+                HStack(spacing: 6) {
+                    ForEach(0..<5) { col in
+                        let index = row * 5 + col
+                        if index < session.pieces.count {
+                            PuzzlePieceCell(piece: session.pieces[index], selectedColor: session.selectedColor)
+                        }
                     }
                 }
             }
+        }
+        .padding(.horizontal)
+        .padding(.top, 30)
+    }
+}
+
+// MARK: - Animation
+struct AnalysingAnimation: View {
+    @Binding var path: [String]
+
+    var body: some View {
+        ZStack {
+            // Background
+            ColourPuzzleSnapshot()
+                            .blur(radius: 18)
+                            .ignoresSafeArea()
+            // Blur layer
+            Color.white.opacity(0.6)
+//                .background(.ultraThinMaterial)
+                .ignoresSafeArea()
             
-// >>>>>>>Here we need to substitute for the AI Analysis Screen when we have it done <<<<<<<
-            .navigationDestination(for: String.self) { value in
-                if value == "write" {
-                    WriteReflectionView()
+            //Animation
+            PuzzleAnimation()
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                runFullCycle {
+                    path.append("analysis")
                 }
             }
         }
     }
+}
 // Animation Cycle
 func runOneCycle(completion: @escaping () -> Void) {
-        NotificationCenter.default.post(name: .runPuzzleCycle, object: nil)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
-            completion()
-        }
+    NotificationCenter.default.post(name: .runPuzzleCycle, object: nil)
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+        completion()
     }
 }
-
-
 
 // MARK: - Animation lines
 
@@ -60,7 +71,7 @@ struct PuzzleAnimation: View {
         CGSize(width:  10, height:  10),
         CGSize(width: -10, height:  10)
     ]
-    @State private var currentPositions: [Int] = [3, 0, 1, 2]
+    @State private var currentPositions: [Int] = [0, 1, 2, 3]
     @State private var isExpanding = false
 
     var body: some View {
@@ -80,10 +91,10 @@ struct PuzzleAnimation: View {
                     .cornerRadius(10)
                     .position(x: x, y: y)
                     .animation(.easeInOut(duration: 0.3), value: isExpanding)
-                    .animation(.easeInOut(duration: 1.0), value: currentPositions)
+                    .animation(.easeInOut(duration: 0.8), value: currentPositions)
             }
         }
-        .frame(width: 120, height: 120)
+        .frame(width: 100, height: 100)
         .onReceive(NotificationCenter.default.publisher(for: .runPuzzleCycle)) { _ in
             runCycle()
         }
@@ -103,7 +114,7 @@ struct PuzzleAnimation: View {
 }
 func runFullCycle(completion: @escaping () -> Void) {
     let cycleDuration: Double = 1.6
-    let buffer: Double = 0.4 // tempo extra para a última animação terminar com suavidade
+    let buffer: Double = 0.2 // tempo extra para a última animação terminar com suavidade
 
     for i in 0..<4 {
         DispatchQueue.main.asyncAfter(deadline: .now() + cycleDuration * Double(i)) {
