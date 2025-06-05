@@ -2,6 +2,9 @@
 import SwiftUI
 
 struct WriteReflectionView: View{
+    @Binding var path: [String]
+    @Binding var selectedTab: Tab
+    
     @State private var reflectionText = ""
     @State private var showConfirmation = false
     @FocusState private var isTextEditorFocused: Bool
@@ -14,22 +17,22 @@ struct WriteReflectionView: View{
             // Title with icon
             HStack(alignment: .top, spacing: 8) {
                 Image(systemName: "bubbles.and.sparkles.fill")
-                    .font(.largeTitle)
+                    .font(.title)
                 Text("Tree and focus")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     }
-            .padding(.horizontal)
             .padding(.top, 2)
             
             // Reflection input
             ZStack(alignment: .topLeading){
                 TextEditor(text: $reflectionText)
-                    .frame(minHeight: 150)
-                    .padding(.horizontal)
-                    .padding(.top, 0)
+                    .font(.body)
+                    .lineSpacing(4)
+                    .padding(.top, 2)
+//                    .frame(minHeight: 150)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 8)
+                        RoundedRectangle(cornerRadius: 0)
                             .stroke(Color.clear, lineWidth: 1)
                             )
                     .focused($isTextEditorFocused)
@@ -38,8 +41,9 @@ struct WriteReflectionView: View{
                 if reflectionText.isEmpty {
                     Text("Reflect on the relationship between your creation and focus")
                         .foregroundColor(.gray)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 2)
+                        .font(.body)
+                        .padding(.horizontal, 6)
+                        .padding(.top, 10)
                         .onTapGesture {
                             isTextEditorFocused = true
                                     }
@@ -65,7 +69,6 @@ struct WriteReflectionView: View{
                     .foregroundColor(reflectionText.isEmpty ? .gray : .white)
                     .cornerRadius(25)
             }
-            .padding(.horizontal)
             .padding(.top, 10)
             .disabled(reflectionText.isEmpty)        }
         .padding()
@@ -94,8 +97,11 @@ struct WriteReflectionView: View{
                             withAnimation {
                                 showConfirmation = false
                             }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    path = []
+                                
+                                }
                         }) {
-                            
                             Text("Cool!")
                                 .font(.body)
                                 .fontWeight(.semibold)
@@ -106,7 +112,7 @@ struct WriteReflectionView: View{
                     }
                     .background(Color.white)
                     .cornerRadius(16)
-                    .padding(.horizontal, 40)
+                    .padding(.horizontal, 60)
                     .shadow(radius: 10)
                     .transition(.scale)
                 }

@@ -6,7 +6,7 @@ import SwiftUI
 struct ContentView: View {
     
     var setGoToPuzzle: ((@escaping () -> Void) -> Void)? = nil
-    @Binding var showPuzzle: Bool
+    @Binding var path: [String]
     
     @State private var showSidebar = false
     
@@ -74,7 +74,9 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            setGoToPuzzle?({ self.showPuzzle = true })
+            setGoToPuzzle?({
+                path.append("puzzle")
+            })
         }
     }
 }

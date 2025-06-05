@@ -73,7 +73,7 @@ struct ReflectionsView: View{
             }
             
             
-            // MARK: - Side Menu
+// MARK: - Side Menu
             if showSidebar {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
