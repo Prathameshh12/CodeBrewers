@@ -1,0 +1,116 @@
+<svg width="430" height="430" viewBox="0 0 430 430" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2150_4881)">
+<rect x="210" width="100" height="100" rx="12" transform="rotate(90 210 0)" fill="#FFADAD"/>
+<path d="M207.97 15.1901C201.64 17.1701 196.22 62.9801 190.07 65.3501C178.13 69.9601 163.3 25.1101 152.14 31.1101C140.08 37.6001 178.06 71.6301 167.04 79.6201C164.52 81.4401 114.89 63.1001 112.44 65.0001C111.66 65.6001 110.89 66.2101 110.11 66.8201L110.11 99.8601L209.9 99.8601L209.9 14.6101C209.26 14.8101 208.61 14.9901 207.97 15.1901Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip1_2150_4881)">
+<rect width="100" height="100" rx="12" transform="matrix(4.37114e-08 1 1 -4.37114e-08 220 0)" fill="#FFADAD"/>
+<path d="M222.03 15.1901C228.36 17.1701 233.78 62.9801 239.93 65.3501C251.87 69.9601 266.7 25.1101 277.86 31.1101C289.92 37.6001 251.94 71.6301 262.96 79.6201C265.48 81.4401 315.11 63.1001 317.56 65.0001C318.34 65.6001 319.11 66.2101 319.89 66.8201L319.89 99.8601L220.1 99.8601L220.1 14.6101C220.74 14.8101 221.39 14.9901 222.03 15.1901Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip2_2150_4881)">
+<rect y="110" width="100" height="100" rx="12" fill="#FFADAD"/>
+<path d="M100 109.78H23.6004C8.68043 137.05 0.19043 168.34 0.19043 201.61C0.19043 204.5 0.27043 207.37 0.39043 210.22H99.9904V109.78H100Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip3_2150_4881)">
+<rect width="100" height="100" rx="12" transform="matrix(-1 0 0 1 430 110)" fill="#FFADAD"/>
+<path d="M330 109.78H406.4C421.32 137.05 429.81 168.34 429.81 201.61C429.81 204.5 429.73 207.37 429.61 210.22H330.01V109.78H330Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip4_2150_4881)">
+<rect x="110" y="110" width="100" height="100" rx="12" fill="#FFADAD"/>
+<path d="M209.87 110.1H110.12V209.9H209.87V110.1Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip5_2150_4881)">
+<rect x="110" y="220" width="100" height="100" rx="12" fill="#FFADAD"/>
+<path d="M209.87 220.1H110.12V319.9H209.87V220.1Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip6_2150_4881)">
+<rect x="220" y="110" width="100" height="100" rx="12" fill="#FFADAD"/>
+<path d="M319.87 110.1H220.12V209.9H319.87V110.1Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip7_2150_4881)">
+<rect x="220" y="220" width="100" height="100" rx="12" fill="#FFADAD"/>
+<path d="M319.87 220.1H220.12V319.9H319.87V220.1Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip8_2150_4881)">
+<rect y="330" width="100" height="100" rx="12" fill="#FFADAD"/>
+<path d="M99.8801 362.74V330.1H70.1602C79.2802 341.68 89.2201 352.59 99.8801 362.74Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip9_2150_4881)">
+<rect width="100" height="100" rx="12" transform="matrix(-1 0 0 1 430 330)" fill="#FFADAD"/>
+<path d="M330.12 362.74V330.1H359.84C350.72 341.68 340.78 352.59 330.12 362.74Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip10_2150_4881)">
+<rect width="100" height="100" rx="12" transform="matrix(1 -8.74228e-08 -8.74228e-08 -1 0 100)" fill="#FFADAD"/>
+<path d="M74.2002 73.2501C83.4502 73.2501 92.1702 75.4601 99.9002 79.3701L99.9002 99.8701L25.9502 99.8701C36.0602 83.8701 53.8802 73.2401 74.2002 73.2401L74.2002 73.2501Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip11_2150_4881)">
+<rect x="430" y="100" width="100" height="100" rx="12" transform="rotate(-180 430 100)" fill="#FFADAD"/>
+<path d="M355.8 73.2501C346.55 73.2501 337.83 75.4601 330.1 79.3701L330.1 99.8701L404.05 99.8701C393.94 83.8701 376.12 73.2401 355.8 73.2401L355.8 73.2501Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip12_2150_4881)">
+<rect x="220" y="430" width="100" height="100" rx="12" transform="rotate(-90 220 430)" fill="#FFADAD"/>
+<path d="M319.9 363.17L319.9 330.12L220.1 330.12L220.1 415.39C256.76 404.19 290.5 386.32 319.9 363.17Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip13_2150_4881)">
+<rect width="100" height="100" rx="12" transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 210 430)" fill="#FFADAD"/>
+<path d="M110.1 363.17L110.1 330.12L209.9 330.12L209.9 415.39C173.24 404.19 139.5 386.32 110.1 363.17Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip14_2150_4881)">
+<rect y="220" width="100" height="100" rx="12" fill="#FFADAD"/>
+<path d="M66.8304 319.9H99.8803V220.1H14.6104C25.8104 256.76 43.6804 290.5 66.8304 319.9Z" fill="#FF3B30"/>
+</g>
+<g clip-path="url(#clip15_2150_4881)">
+<rect width="100" height="100" rx="12" transform="matrix(-1 0 0 1 430 220)" fill="#FFADAD"/>
+<path d="M363.17 319.9H330.12V220.1H415.39C404.19 256.76 386.32 290.5 363.17 319.9Z" fill="#FF3B30"/>
+</g>
+<defs>
+<clipPath id="clip0_2150_4881">
+<rect x="210" width="100" height="100" rx="12" transform="rotate(90 210 0)" fill="white"/>
+</clipPath>
+<clipPath id="clip1_2150_4881">
+<rect width="100" height="100" rx="12" transform="matrix(4.37114e-08 1 1 -4.37114e-08 220 0)" fill="white"/>
+</clipPath>
+<clipPath id="clip2_2150_4881">
+<rect y="110" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip3_2150_4881">
+<rect width="100" height="100" rx="12" transform="matrix(-1 0 0 1 430 110)" fill="white"/>
+</clipPath>
+<clipPath id="clip4_2150_4881">
+<rect x="110" y="110" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip5_2150_4881">
+<rect x="110" y="220" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip6_2150_4881">
+<rect x="220" y="110" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip7_2150_4881">
+<rect x="220" y="220" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip8_2150_4881">
+<rect y="330" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip9_2150_4881">
+<rect width="100" height="100" rx="12" transform="matrix(-1 0 0 1 430 330)" fill="white"/>
+</clipPath>
+<clipPath id="clip10_2150_4881">
+<rect width="100" height="100" rx="12" transform="matrix(1 -8.74228e-08 -8.74228e-08 -1 0 100)" fill="white"/>
+</clipPath>
+<clipPath id="clip11_2150_4881">
+<rect x="430" y="100" width="100" height="100" rx="12" transform="rotate(-180 430 100)" fill="white"/>
+</clipPath>
+<clipPath id="clip12_2150_4881">
+<rect x="220" y="430" width="100" height="100" rx="12" transform="rotate(-90 220 430)" fill="white"/>
+</clipPath>
+<clipPath id="clip13_2150_4881">
+<rect width="100" height="100" rx="12" transform="matrix(4.37114e-08 -1 -1 -4.37114e-08 210 430)" fill="white"/>
+</clipPath>
+<clipPath id="clip14_2150_4881">
+<rect y="220" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip15_2150_4881">
+<rect width="100" height="100" rx="12" transform="matrix(-1 0 0 1 430 220)" fill="white"/>
+</clipPath>
+</defs>
+</svg>

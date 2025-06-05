@@ -1,0 +1,48 @@
+<svg width="320" height="322" viewBox="0 0 320 322" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="110" width="100" height="100" rx="12" fill="#FF3BAA"/>
+<path d="M136.3 0.100098L160 99.9001L185.78 0.100098H136.3Z" fill="#FF9DD5"/>
+<g clip-path="url(#clip0_2150_4549)">
+<rect x="110" y="111" width="100" height="100" rx="12" fill="#FF9DD5"/>
+<path d="M209.87 111.1H110.12V210.9H209.87V111.1Z" fill="#FF3BAA"/>
+</g>
+<g clip-path="url(#clip1_2150_4549)">
+<rect x="210" y="322" width="100" height="100" rx="12" transform="rotate(-180 210 322)" fill="#FF9DD5"/>
+<path d="M209.87 222.1L110.12 222.1L160 321.9L209.87 222.1Z" fill="#FF3BAA"/>
+</g>
+<g clip-path="url(#clip2_2150_4549)">
+<rect x="220" width="100" height="100" rx="12" fill="#FF9DD5"/>
+<path d="M319.88 99.9001V49.7801C297.77 19.6601 262.12 0.100098 221.9 0.100098C221.3 0.100098 220.72 0.110098 220.13 0.120098V99.9001H319.88Z" fill="#FF3BAA"/>
+</g>
+<g clip-path="url(#clip3_2150_4549)">
+<rect width="100" height="100" rx="12" transform="matrix(-1 0 0 1 100 0)" fill="#FF9DD5"/>
+<path d="M0.120117 99.9001V49.7801C22.2301 19.6601 57.8801 0.100098 98.1001 0.100098C98.7001 0.100098 99.2801 0.110098 99.8701 0.120098V99.9001H0.120117Z" fill="#FF3BAA"/>
+</g>
+<g clip-path="url(#clip4_2150_4549)">
+<rect x="100" y="211" width="100" height="100" rx="12" transform="rotate(-180 100 211)" fill="#FF9DD5"/>
+<path d="M99.8701 111.1L0.120126 111.1L99.8701 210.9L99.8701 111.1Z" fill="#FF3BAA"/>
+</g>
+<g clip-path="url(#clip5_2150_4549)">
+<rect x="320" y="111" width="100" height="100" rx="12" transform="rotate(90 320 111)" fill="#FF9DD5"/>
+<path d="M220.1 111.13L220.1 210.88L319.9 111.13L220.1 111.13Z" fill="#FF3BAA"/>
+</g>
+<defs>
+<clipPath id="clip0_2150_4549">
+<rect x="110" y="111" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip1_2150_4549">
+<rect x="210" y="322" width="100" height="100" rx="12" transform="rotate(-180 210 322)" fill="white"/>
+</clipPath>
+<clipPath id="clip2_2150_4549">
+<rect x="220" width="100" height="100" rx="12" fill="white"/>
+</clipPath>
+<clipPath id="clip3_2150_4549">
+<rect width="100" height="100" rx="12" transform="matrix(-1 0 0 1 100 0)" fill="white"/>
+</clipPath>
+<clipPath id="clip4_2150_4549">
+<rect x="100" y="211" width="100" height="100" rx="12" transform="rotate(-180 100 211)" fill="white"/>
+</clipPath>
+<clipPath id="clip5_2150_4549">
+<rect x="320" y="111" width="100" height="100" rx="12" transform="rotate(90 320 111)" fill="white"/>
+</clipPath>
+</defs>
+</svg>
