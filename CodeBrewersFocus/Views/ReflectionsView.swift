@@ -23,11 +23,11 @@ struct ReflectionsView: View{
                                 showSidebar.toggle()
                             }
                         }) {
-                            Image("Puppy")
+                            Image("applogo")
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 40, height: 40)
-                                .clipShape(Circle())
+                                .clipShape(Rectangle())
                         }
                         Text("Reflections")
                             .font(.title2)

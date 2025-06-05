@@ -40,17 +40,21 @@ struct AnalysisView: View {
             Text("Make the creation visible in Explore")
                 .padding(.horizontal, 30)
         }
-        HStack(spacing: 6){
-            Image(systemName: "bubbles.and.sparkles.fill")
-            Text("Reflect")
+        Button(action: {
+            
+        }) {
+            NavigationLink(destination: WriteReflectionView()) {
+                Text("Reflect")
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(25)
+            }
         }
-        .fontWeight(.bold)
-        .frame(maxWidth: .infinity)
-        .padding()
-        .cornerRadius(25)
-        .background(Color.blue)
-        .foregroundColor(.white)
-        .cornerRadius(25)
+        .padding(.horizontal)
+        .padding(.bottom, 20)
         
     }
 }
