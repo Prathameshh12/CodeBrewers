@@ -51,6 +51,9 @@ struct PuzzleBlockView: View {
 
 struct PuzzleView: View {
     
+    @EnvironmentObject var session: PuzzleSession
+    @Binding var path: [String]
+    
 // for draft saving
     @State private var showingSaveAlert = false
     @State private var showSavedMessage = false
@@ -87,8 +90,8 @@ struct PuzzleView: View {
                     HStack(spacing: 6) {
                         ForEach(0..<5) { col in
                             let index = row * 5 + col
-                            if index < pieces.count {
-                                let pieceBinding = $pieces[index]
+                            if index < session.pieces.count {
+                                let pieceBinding = $session.pieces[index]
                                 let piece = pieceBinding.wrappedValue
                                 Group {
                                     if piece.isPlaceholder {
@@ -100,25 +103,25 @@ struct PuzzleView: View {
                                             .foregroundColor(.gray.opacity(0.8))
                                             .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
                                                 guard let droppedPiece = droppedItems.first else { return false }
-                                                if let sourceIndex = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                if let sourceIndex = session.pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
                                                     // Source is puzzle
                                                     if piece.isPlaceholder {
                                                         // Dropping into placeholder → move
-                                                        pieces[sourceIndex] = PuzzlePiece(imageName: "", isPlaceholder: true)
-                                                        pieces[index] = droppedPiece
+                                                        session.pieces[sourceIndex] = PuzzlePiece(imageName: "", isPlaceholder: true)
+                                                        session.pieces[index] = droppedPiece
                                                     } else {
                                                         // Swap positions
-                                                        pieces.swapAt(sourceIndex, index)
+                                                        session.pieces.swapAt(sourceIndex, index)
                                                     }
                                                 } else if let shelfIndex = onHoldShelf.firstIndex(where: { $0.id == droppedPiece.id }) {
                                                     if piece.isPlaceholder {
                                                         // Move from shelf → puzzle (remove from shelf)
                                                         onHoldShelf.remove(at: shelfIndex)
-                                                        pieces[index] = droppedPiece
+                                                        session.pieces[index] = droppedPiece
                                                     } else {
                                                         // Swap shelf <-> puzzle
-                                                        let current = pieces[index]
-                                                        pieces[index] = droppedPiece
+                                                        let current = session.pieces[index]
+                                                        session.pieces[index] = droppedPiece
                                                         onHoldShelf[shelfIndex] = current
                                                     }
                                                 }
@@ -134,12 +137,12 @@ struct PuzzleView: View {
                                         .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
                                             guard let droppedPiece = droppedItems.first else { return false }
 
-                                            if let sourceIndex = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
-                                                pieces.swapAt(sourceIndex, index)
+                                            if let sourceIndex = session.pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                session.pieces.swapAt(sourceIndex, index)
                                             }
                                             else if let shelfIndex = onHoldShelf.firstIndex(where: { $0.id == droppedPiece.id }) {
-                                                let puzzlePiece = pieces[index]
-                                                pieces[index] = droppedPiece
+                                                let puzzlePiece = session.pieces[index]
+                                                session.pieces[index] = droppedPiece
                                                 onHoldShelf[shelfIndex] = puzzlePiece
                                             }
                                             return true
@@ -149,11 +152,11 @@ struct PuzzleView: View {
                                 .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
                                     guard let droppedPiece = droppedItems.first else { return false }
 
-                                    if let index = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                    if let index = session.pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
                                         // From puzzle to shelf → move
-                                        let realPiece = pieces[index]
+                                        let realPiece = session.pieces[index]
                                         onHoldShelf.append(realPiece)
-                                        pieces[index] = PuzzlePiece(imageName: "", isPlaceholder: true)
+                                        session.pieces[index] = PuzzlePiece(imageName: "", isPlaceholder: true)
                                         return true
                                     }
                                     return false
@@ -164,11 +167,18 @@ struct PuzzleView: View {
                 }
                 // for draft saving
                 .onAppear {
-                        if let saved = PuzzleDraftManager.shared.loadDraft() {
-                            self.pieces = saved
-                        }
+                    if let saved = PuzzleDraftManager.shared.loadDraft() {
+                        self.pieces = saved
+                        session.pieces = saved
                     }
-            }
+                    if session.pieces.isEmpty {
+                        session.pieces = (1...30).map {
+                            PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
+                        }
+                        self.pieces = session.pieces
+                    }
+                }
+                
             .padding(.horizontal)
             .padding(.top, 30)
             
@@ -188,7 +198,7 @@ struct PuzzleView: View {
                         .opacity(isCopyFlashing ? 1.0 : 0.4)
                         .onTapGesture {
                                 if let selectedID = selectedPieceID {
-                                    if let originalPiece = pieces.first(where: { $0.id == selectedID }) {
+                                    if let originalPiece = session.pieces.first(where: { $0.id == selectedID }) {
                                         let copiedPiece = PuzzlePiece(imageName: originalPiece.imageName)
                                         onHoldShelf.append(copiedPiece)
                                     } else if let originalPiece = onHoldShelf.first(where: { $0.id == selectedID }) {
@@ -212,9 +222,9 @@ struct PuzzleView: View {
                         .opacity(isInvertFlashing ? 1.0 : 0.4)
                         .onTapGesture {
                                 if let selectedID = selectedPieceID {
-                                    if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                    if let index = session.pieces.firstIndex(where: { $0.id == selectedID }) {
                                         withAnimation(.easeInOut(duration: .infinity)) {
-                                            pieces[index].isInverted.toggle()
+                                            session.pieces[index].isInverted.toggle()
                                             isInvertFlashing = true
                                         }
                                     } else if let index = onHoldShelf.firstIndex(where: { $0.id == selectedID }) {
@@ -238,11 +248,11 @@ struct PuzzleView: View {
                         .opacity(isRotateRightFlashing ? 1.0 : 0.4)
                         .onTapGesture {
                                 if let selectedID = selectedPieceID {
-                                    if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                    if let index = session.pieces.firstIndex(where: { $0.id == selectedID }) {
                                         withAnimation(.easeInOut(duration: 0.2)) {
-                                            pieces[index].rotation += 90
-                                            if pieces[index].rotation >= 360 {
-                                                pieces[index].rotation = 0
+                                            session.pieces[index].rotation += 90
+                                            if session.pieces[index].rotation >= 360 {
+                                                session.pieces[index].rotation = 0
                                             }
                                             isRotateRightFlashing = true
                                         }
@@ -269,11 +279,11 @@ struct PuzzleView: View {
                         .opacity(isRotateLeftFlashing ? 1.0 : 0.4)
                         .onTapGesture {
                             if let selectedID = selectedPieceID {
-                                if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                if let index = session.pieces.firstIndex(where: { $0.id == selectedID }) {
                                     withAnimation(.easeInOut(duration: 0.2)) {
-                                        pieces[index].rotation -= 90
-                                        if pieces[index].rotation >= 360 {
-                                            pieces[index].rotation = 0
+                                        session.pieces[index].rotation -= 90
+                                        if session.pieces[index].rotation >= 360 {
+                                            session.pieces[index].rotation = 0
                                             }
                                             isRotateLeftFlashing = true
                                         }
@@ -300,9 +310,9 @@ struct PuzzleView: View {
                         .opacity(isFlipHorizontally ? 1.0 : 0.4)
                         .onTapGesture {
                                 if let selectedID = selectedPieceID {
-                                    if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                    if let index = session.pieces.firstIndex(where: { $0.id == selectedID }) {
                                         withAnimation(.easeInOut(duration: 0.2)) {
-                                            pieces[index].flippedHorizontally.toggle()
+                                            session.pieces[index].flippedHorizontally.toggle()
                                             isFlipHorizontally = true
                                         }
                                     } else if let index = onHoldShelf.firstIndex(where: { $0.id == selectedID }) {
@@ -325,9 +335,9 @@ struct PuzzleView: View {
                         .opacity(isFlipVertically ? 1.0 : 0.4)
                         .onTapGesture {
                                 if let selectedID = selectedPieceID {
-                                    if let index = pieces.firstIndex(where: { $0.id == selectedID }) {
+                                    if let index = session.pieces.firstIndex(where: { $0.id == selectedID }) {
                                         withAnimation(.easeInOut(duration: 0.2)) {
-                                            pieces[index].flippedVertically.toggle()
+                                            session.pieces[index].flippedVertically.toggle()
                                             isFlipVertically = true
                                         }
                                     } else if let index = onHoldShelf.firstIndex(where: { $0.id == selectedID }) {
@@ -408,15 +418,15 @@ struct PuzzleView: View {
                                         guard let droppedPiece = droppedItems.first else { return false }
 
                                         if !onHoldShelf.contains(where: { $0.id == droppedPiece.id }) {
-                                            if let index = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
-                                                let realPiece = pieces[index]
+                                            if let index = session.pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                let realPiece = session.pieces[index]
                                                 onHoldShelf.append(realPiece)
-                                                pieces[index] = PuzzlePiece(imageName: "", isPlaceholder: true)
+                                                session.pieces[index] = PuzzlePiece(imageName: "", isPlaceholder: true)
                                             }
 
                                             // Replace puzzle piece with an empty slot
-                                            if let index = pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
-                                                pieces[index] = PuzzlePiece(imageName: "", isPlaceholder: true)
+                                            if let index = session.pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
+                                                session.pieces[index] = PuzzlePiece(imageName: "", isPlaceholder: true)
                                             }
                                         }
                                         return true
@@ -438,17 +448,16 @@ struct PuzzleView: View {
             }
 // MARK: - Continue Button
             Button(action: {
+                path.append("colour")
                 
             }) {
-                NavigationLink(destination: ColourPuzzleView(pieces: pieces)) {
-                    Text("Continue")
-                        .fontWeight(.bold)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(25)
-                }
+                Text("Continue")
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(25)
             }
             .padding(.horizontal)
             .padding(.bottom, 20)
