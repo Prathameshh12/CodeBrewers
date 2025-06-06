@@ -77,7 +77,7 @@ struct WriteReflectionView: View{
             Group {
                 if showConfirmation {
                     ZStack {
-                        Color.black.opacity(0.4)
+                        Color.black.opacity(0.5)
                             .ignoresSafeArea()
                             .transition(.opacity)
                     VStack(spacing: 0) {

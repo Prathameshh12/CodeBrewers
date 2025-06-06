@@ -493,6 +493,7 @@ struct PuzzleView: View {
                     Button("Discard creation", role: .destructive) {
                         // Discard logic here
                         PuzzleDraftManager.shared.clearDraft()
+                        session.pieces = []
                         presentationMode.wrappedValue.dismiss()
                     }
                     Button("Cancel", role: .cancel) { }
