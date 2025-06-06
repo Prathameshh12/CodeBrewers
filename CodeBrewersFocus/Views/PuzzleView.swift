@@ -169,14 +169,14 @@ struct PuzzleView: View {
                 // for draft saving
                 .onAppear {
                     if let saved = PuzzleDraftManager.shared.loadDraft() {
-                        self.pieces = saved
+//                        self.pieces = saved
                         session.pieces = saved
                     }
                     if session.pieces.isEmpty {
                         session.pieces = (1...30).map {
                             PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
                         }
-                        self.pieces = session.pieces
+                      //  self.pieces = session.pieces
                     }
                 }
             
@@ -487,7 +487,7 @@ struct PuzzleView: View {
                 ) {
                     Button("Save draft") {
                         // Save logic here
-                        PuzzleDraftManager.shared.saveDraft(pieces)
+                        PuzzleDraftManager.shared.saveDraft(session.pieces)
                         presentationMode.wrappedValue.dismiss()
                     }
                     Button("Discard creation", role: .destructive) {
