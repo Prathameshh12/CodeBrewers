@@ -13,7 +13,7 @@ struct WriteReflectionView: View{
         
         VStack(alignment: .leading) {
             
-
+            
             // Title with icon
             HStack(alignment: .top, spacing: 8) {
                 Image(systemName: "bubbles.and.sparkles.fill")
@@ -21,7 +21,7 @@ struct WriteReflectionView: View{
                 Text("Tree and focus")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    }
+            }
             .padding(.top, 2)
             
             // Reflection input
@@ -30,13 +30,13 @@ struct WriteReflectionView: View{
                     .font(.body)
                     .lineSpacing(4)
                     .padding(.top, 2)
-//                    .frame(minHeight: 150)
+                //                    .frame(minHeight: 150)
                     .overlay(
                         RoundedRectangle(cornerRadius: 0)
                             .stroke(Color.clear, lineWidth: 1)
-                            )
+                    )
                     .focused($isTextEditorFocused)
-
+                
                 
                 if reflectionText.isEmpty {
                     Text("Reflect on the relationship between your creation and focus")
@@ -46,9 +46,9 @@ struct WriteReflectionView: View{
                         .padding(.top, 10)
                         .onTapGesture {
                             isTextEditorFocused = true
-                                    }
                         }
-                    }
+                }
+            }
             .contentShape(Rectangle())
             .onTapGesture {
                 isTextEditorFocused = true
@@ -75,32 +75,36 @@ struct WriteReflectionView: View{
         .overlay(
             Group {
                 if showConfirmation {
+                    ZStack {
+                        Color.black.opacity(0.4)
+                            .ignoresSafeArea()
+                            .transition(.opacity)
                     VStack(spacing: 0) {
                         VStack(spacing: 12) {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 30))
                                 .foregroundColor(.blue)
-
+                            
                             Text("Reflection saved")
                                 .font(.headline)
                                 .bold()
-
+                            
                             Text("Your reflections\nare yours to revisit anytime.")
                                 .font(.subheadline)
                                 .multilineTextAlignment(.center)
                         }
                         .padding()
-
+                        
                         Divider()
-
+                        
                         Button(action: {
                             withAnimation {
                                 showConfirmation = false
                             }
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    path = []
+                                path = []
                                 
-                                }
+                            }
                         }) {
                             Text("Cool!")
                                 .font(.body)
@@ -117,6 +121,7 @@ struct WriteReflectionView: View{
                     .transition(.scale)
                 }
             }
+    }
         )
         .navigationTitle("Reflection")
         .navigationBarTitleDisplayMode(.inline)
