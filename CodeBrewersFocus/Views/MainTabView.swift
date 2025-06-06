@@ -3,7 +3,10 @@ import SwiftUI
 class PuzzleSession: ObservableObject {
     @Published var pieces: [PuzzlePiece] = []
     @Published var selectedColor: Color = .clear
+    @Published var onHoldShelf: [PuzzlePiece] = []
 }
+
+
 
 enum Tab {
     case reflections, create, explore
@@ -14,7 +17,14 @@ struct MainTabView: View {
     @State private var createGoToPuzzle: (() -> Void)? = nil
     @State private var path: [String] = []
     @StateObject private var session = PuzzleSession()
-
+    
+    func resetPuzzle() {
+        session.pieces = (1...30).map { PuzzlePiece(imageName: String(format: "Wave-%02d", $0)) }
+        session.onHoldShelf = []
+        session.selectedColor = .clear
+    }
+    
+    
 
     var body: some View {
         
@@ -62,7 +72,9 @@ struct MainTabView: View {
                 case "analysis":
                     AnalysisView(path: $path)
                 case "write":
-                    WriteReflectionView(path: $path, selectedTab: $selectedTab)
+                    WriteReflectionView(path: $path, selectedTab: $selectedTab, onCool: {
+                        resetPuzzle()
+                    })
                 default:
                     ContentView(
                         setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path
@@ -74,56 +86,6 @@ struct MainTabView: View {
     }
 }
 
-//
-//import SwiftUI
-//
-//enum Tab {
-//    case reflections, create, explore
-//}
-//
-//struct MainTabView: View {
-//    @State private var selectedTab: Tab = .create
-//    @State private var showPuzzle = false
-//    @State private var createGoToPuzzle: (() -> Void)? = nil
-//    @State private var path: [String] = []
-//    
-//    var body: some View {
-//        
-//        NavigationStack {
-//            ZStack(alignment: .bottom) {
-//                Group {
-//                    switch selectedTab {
-//                    case .reflections:
-//                        ReflectionsView()
-//                    case .create:
-//                        ContentView(setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, showPuzzle: $showPuzzle)
-//                    case .explore:
-//                        ExploreView()
-//                    }
-//                }
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                .background(Color(.systemGray6).ignoresSafeArea())
-//                .padding(.bottom, -94)
-//                
-//                CustomTabBar(
-//                    selectedTab: $selectedTab,
-//                    onCreateAgain: {
-//                        if selectedTab == .create {
-//                            createGoToPuzzle?()
-//                        } else {
-//                            selectedTab = .create
-//                        }
-//                    }
-//                )
-//                .edgesIgnoringSafeArea(.bottom)
-//            }
-//            .navigationDestination(isPresented: $showPuzzle) {
-//                PuzzleView()
-//            }
-//        }
-//    }
-//}
-//    
 // MARK: - Setting up custom tab bar
 struct CustomTabBar: View {
     @Binding var selectedTab: Tab
