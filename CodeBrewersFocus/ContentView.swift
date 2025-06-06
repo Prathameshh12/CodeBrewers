@@ -30,10 +30,10 @@ struct ContentView: View {
                             .scaledToFill()
                             .frame(width: 30, height: 30)
                     }
-                    Text("Singular")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .padding(.leading, 8)
+//                    Text("Singular")
+//                        .font(.title2)
+//                        .fontWeight(.bold)
+//                        .padding(.leading, 8)
                     Spacer()
                 }
                 .padding(.top)

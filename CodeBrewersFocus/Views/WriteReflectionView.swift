@@ -4,6 +4,7 @@ import SwiftUI
 struct WriteReflectionView: View{
     @Binding var path: [String]
     @Binding var selectedTab: Tab
+    var onCool: () -> Void = {}
     
     @State private var reflectionText = ""
     @State private var showConfirmation = false
@@ -98,7 +99,8 @@ struct WriteReflectionView: View{
                                 showConfirmation = false
                             }
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    path = []
+                                path = []
+                                onCool()
                                 
                                 }
                         }) {

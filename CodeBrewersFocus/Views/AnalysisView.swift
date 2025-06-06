@@ -3,6 +3,7 @@ import SwiftUI
 
 struct AnalysisView: View {
     @Binding var path: [String]
+    @State private var isVisibleInExplore = true
     
     var body: some View {
 
@@ -19,7 +20,7 @@ struct AnalysisView: View {
                 .frame(width: 400, height: 400)
             
             HStack {
-                Toggle("", isOn: .constant(true))
+                Toggle("", isOn: $isVisibleInExplore)
                     .labelsHidden()
                 Text("Make the creation visible in Explore")
                     .font(.body)
