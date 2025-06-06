@@ -77,98 +77,100 @@ struct ExploreView: View {
        }
     
     var body: some View {
-        GeometryReader { geometry in
-            let spacing: CGFloat = 10
-            let totalSpacing = spacing
-            let itemWidth = (geometry.size.width - totalSpacing - 40) / 2
-            
-            VStack(alignment: .leading) {
-// MARK: -  Top Bar
-                HStack {
-                    Button(action: {
-                        withAnimation {
-                            showSidebar.toggle()
+        ZStack(alignment: .leading) {
+            GeometryReader { geometry in
+                let spacing: CGFloat = 10
+                let totalSpacing = spacing
+                let itemWidth = (geometry.size.width - totalSpacing - 40) / 2
+                
+                VStack(alignment: .leading) {
+                    // MARK: -  Top Bar
+                    HStack {
+                        Button(action: {
+                            withAnimation {
+                                showSidebar.toggle()
+                            }
+                        }) {
+                            Image("LogoBlock")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 30, height: 30)
                         }
-                    }) {
-                        Image("LogoBlock")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 30, height: 30)
+                        Text("Explore")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding(.leading, 8)
+                        Spacer()
                     }
-                    Text("Explore")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .padding(.leading, 8)
-                    Spacer()
-                }
-                .padding(.top)
-                .padding(.horizontal)
-// MARK: -  Search bar
-                CustomSearchBar(text: $searchText)
-// MARK: - Category buttons
-                HStack {
-                    ForEach(["Flow", "Adaptability", "Presence"], id: \.self) { title in
-                        Button(title) {
+                    .padding(.top)
+                    .padding(.horizontal)
+                    // MARK: -  Search bar
+                    CustomSearchBar(text: $searchText)
+                    // MARK: - Category buttons
+                    HStack {
+                        ForEach(["Flow", "Adaptability", "Presence"], id: \.self) { title in
+                            Button(title) {
+                            }
+                            .font(.subheadline)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 4)
+                            .background(Color(.white))
+                            .foregroundStyle(Color.black)
+                            .clipShape(Capsule())
                         }
-                        .font(.subheadline)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 4)
-                        .background(Color(.white))
-                        .foregroundStyle(Color.black)
-                        .clipShape(Capsule())
                     }
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 10)
-// MARK: - Grid
-                ScrollView {
-                    let (left, right) = splitItems()
-                    HStack(alignment: .top, spacing: spacing) {
-                        VStack(spacing: spacing) {
-                            ForEach(left) { item in
-                                ZStack {
-                                    Color.gray.opacity(0.2)
-                                    Image(item.imageName)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: itemWidth, height: item.height)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 10)
+                    // MARK: - Grid
+                    ScrollView {
+                        let (left, right) = splitItems()
+                        HStack(alignment: .top, spacing: spacing) {
+                            VStack(spacing: spacing) {
+                                ForEach(left) { item in
+                                    ZStack {
+                                        Color.gray.opacity(0.2)
+                                        Image(item.imageName)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: itemWidth, height: item.height)
+                                    }
+                                    .cornerRadius(8)
                                 }
-                                .cornerRadius(8)
+                            }
+                            VStack(spacing: spacing) {
+                                ForEach(right) { item in
+                                    ZStack {
+                                        Color.gray.opacity(0.2)
+                                        Image(item.imageName)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: itemWidth, height: item.height)
+                                    }
+                                    .cornerRadius(8)
+                                }
                             }
                         }
-                        VStack(spacing: spacing) {
-                            ForEach(right) { item in
-                                ZStack {
-                                    Color.gray.opacity(0.2)
-                                    Image(item.imageName)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: itemWidth, height: item.height)
-                                }
-                                .cornerRadius(8)
-                            }
-                        }
+                        .padding()
                     }
-                    .padding()
+                    .padding(.bottom, 160)
                 }
-                .padding(.bottom, 160)
             }
-        }
-// MARK: - Side Menu
-        if showSidebar {
-            Color.black.opacity(0.3)
-                .ignoresSafeArea()
-                .onTapGesture {
-                    withAnimation {
-                        showSidebar = false
+            // MARK: - Side Menu
+            if showSidebar {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation {
+                            showSidebar = false
+                        }
                     }
-                }
-            
-            SideMenuView()
-                .frame(width: 300)
-                .transition(.move(edge: .leading))
-                .offset(x: showSidebar ? 0 : -260)
-                .animation(.easeInOut, value: showSidebar)
+                
+                SideMenuView()
+                    .frame(width: 300)
+                    .transition(.move(edge: .leading))
+                    .offset(x: showSidebar ? 0 : -260)
+                    .animation(.easeInOut, value: showSidebar)
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import Foundation
+
 
 struct PuzzlePiece: Identifiable, Hashable, Encodable, Decodable, Transferable {
     var id = UUID()
@@ -20,7 +22,6 @@ extension UTType {
     }
 
 struct PuzzleBlockView: View {
-    
     let piece: PuzzlePiece
     let isSelected: Bool
     var onTap: () -> Void
@@ -49,12 +50,22 @@ struct PuzzleBlockView: View {
 }
 
 struct PuzzleView: View {
+    
     @EnvironmentObject var session: PuzzleSession
     @Binding var path: [String]
     
+// for draft saving
+    @State private var showingSaveAlert = false
+    @State private var showSavedMessage = false
+
 // MARK: - For Back button
     @Environment(\.presentationMode) var presentationMode
     @State private var showExitPopup = false
+    
+// MARK: - For Puzzle
+    @State private var pieces: [PuzzlePiece] = (1...30).map {
+        PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
+    }
     
 // MARK: - For tool box
     @State private var selectedPieceID: UUID? = nil
@@ -70,7 +81,9 @@ struct PuzzleView: View {
     
 // MARK: - Main Part
     var body: some View {
+        
         VStack {
+            
 // MARK: - Puzzle
             VStack(spacing: 6) {
                 ForEach(0..<6) { row in
@@ -112,7 +125,7 @@ struct PuzzleView: View {
                                                         onHoldShelf[shelfIndex] = current
                                                     }
                                                 }
-
+                                                
                                                 return true
                                             }
                                     } else {
@@ -123,7 +136,7 @@ struct PuzzleView: View {
                                         )
                                         .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
                                             guard let droppedPiece = droppedItems.first else { return false }
-
+                                            
                                             if let sourceIndex = session.pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
                                                 session.pieces.swapAt(sourceIndex, index)
                                             }
@@ -138,7 +151,7 @@ struct PuzzleView: View {
                                 }
                                 .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
                                     guard let droppedPiece = droppedItems.first else { return false }
-
+                                    
                                     if let index = session.pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
                                         // From puzzle to shelf → move
                                         let realPiece = session.pieces[index]
@@ -153,13 +166,21 @@ struct PuzzleView: View {
                     }
                 }
             }
-            .onAppear {
-                if session.pieces.isEmpty {
-                    session.pieces = (1...30).map {
-                        PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
+                // for draft saving
+                .onAppear {
+                    if let saved = PuzzleDraftManager.shared.loadDraft() {
+//                        self.pieces = saved
+                        session.pieces = saved
+                    }
+                    if session.pieces.isEmpty {
+                        session.pieces = (1...30).map {
+                            PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
+                        }
+                      //  self.pieces = session.pieces
                     }
                 }
-            }
+            
+                
             .padding(.horizontal)
             .padding(.top, 30)
             
@@ -430,6 +451,7 @@ struct PuzzleView: View {
 // MARK: - Continue Button
             Button(action: {
                 path.append("colour")
+                
             }) {
                 Text("Continue")
                     .fontWeight(.bold)
@@ -465,10 +487,12 @@ struct PuzzleView: View {
                 ) {
                     Button("Save draft") {
                         // Save logic here
+                        PuzzleDraftManager.shared.saveDraft(session.pieces)
                         presentationMode.wrappedValue.dismiss()
                     }
                     Button("Discard creation", role: .destructive) {
                         // Discard logic here
+                        PuzzleDraftManager.shared.clearDraft()
                         presentationMode.wrappedValue.dismiss()
                     }
                     Button("Cancel", role: .cancel) { }
@@ -481,3 +505,7 @@ struct PuzzleView: View {
 #Preview {
     MainTabView()
 }
+
+
+
+
