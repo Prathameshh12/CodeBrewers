@@ -125,7 +125,7 @@ struct PuzzleView: View {
                                                         onHoldShelf[shelfIndex] = current
                                                     }
                                                 }
-
+                                                
                                                 return true
                                             }
                                     } else {
@@ -136,7 +136,7 @@ struct PuzzleView: View {
                                         )
                                         .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
                                             guard let droppedPiece = droppedItems.first else { return false }
-
+                                            
                                             if let sourceIndex = session.pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
                                                 session.pieces.swapAt(sourceIndex, index)
                                             }
@@ -151,7 +151,7 @@ struct PuzzleView: View {
                                 }
                                 .dropDestination(for: PuzzlePiece.self) { droppedItems, _ in
                                     guard let droppedPiece = droppedItems.first else { return false }
-
+                                    
                                     if let index = session.pieces.firstIndex(where: { $0.id == droppedPiece.id }) {
                                         // From puzzle to shelf → move
                                         let realPiece = session.pieces[index]
@@ -165,6 +165,7 @@ struct PuzzleView: View {
                         }
                     }
                 }
+            }
                 // for draft saving
                 .onAppear {
                     if let saved = PuzzleDraftManager.shared.loadDraft() {
@@ -178,6 +179,7 @@ struct PuzzleView: View {
                         self.pieces = session.pieces
                     }
                 }
+            
                 
             .padding(.horizontal)
             .padding(.top, 30)
