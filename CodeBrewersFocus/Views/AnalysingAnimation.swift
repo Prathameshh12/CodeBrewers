@@ -42,7 +42,9 @@ struct AnalysingAnimation: View {
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now()) {
                 runFullCycle {
-                    path.append("analysis")
+                    if path.last != "analysis" {
+                        path.append("analysis")
+                    }
                 }
             }
         }

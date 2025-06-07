@@ -1,21 +1,24 @@
 
 import SwiftUI
 
-// I did something
-
 struct ContentView: View {
     
     var setGoToPuzzle: ((@escaping () -> Void) -> Void)? = nil
     @Binding var path: [String]
     
-    @State private var showSidebar = false
+    @Binding var showSidebar: Bool
     
     var body: some View {
-        ZStack(alignment: .leading) {
-            Image("Spotlight")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
+        ZStack {
+            GeometryReader { geo in
+                Image("Spotlight")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: geo.size.width)
+                    .clipped()
+                    .ignoresSafeArea()
+            }
+                
             
             VStack(spacing: 0) {
 // MARK: - Top Bar
@@ -28,6 +31,7 @@ struct ContentView: View {
                         Image("LogoBlock")
                             .resizable()
                             .scaledToFill()
+                            .clipped()
                             .frame(width: 30, height: 30)
                     }
                     Spacer()
@@ -52,21 +56,6 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 180)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            }
-// MARK: - Side Menu
-            if showSidebar {
-                Color.black.opacity(0.3)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        withAnimation {
-                            showSidebar = false
-                        }
-                    }
-                SideMenuView()
-                    .frame(width: 300)
-                    .transition(.move(edge: .leading))
-                    .offset(x: showSidebar ? 0 : -260)
-                    .animation(.easeInOut, value: showSidebar)
             }
         }
         .onAppear {

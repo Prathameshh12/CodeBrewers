@@ -13,6 +13,7 @@ enum Tab {
 }
 
 struct MainTabView: View {
+    @State private var showSidebar = false
     @State private var selectedTab: Tab = .create
     @State private var createGoToPuzzle: (() -> Void)? = nil
     @State private var path: [String] = []
@@ -27,29 +28,27 @@ struct MainTabView: View {
     }
     
     
-
+    
     var body: some View {
-        
         NavigationStack(path: $path) {
             ZStack(alignment: .bottom) {
-                switch selectedTab {
-                case .reflections:
-                    ReflectionsView()
+                Group {
+                    switch selectedTab {
+                    case .reflections:
+                        ReflectionsView(showSidebar: $showSidebar)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .background(Color(.systemGray6).ignoresSafeArea())
+                            .padding(.bottom, -94)
+                    case .create:
+                        ContentView(
+                            setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path, showSidebar: $showSidebar
+                        )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color(.systemGray6).ignoresSafeArea())
                         .padding(.bottom, -94)
-                case .create:
-                    ContentView(
-                        setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path
-                    )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color(.systemGray6).ignoresSafeArea())
-                    .padding(.bottom, -94)
-                case .explore:
-                    ExploreView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color(.systemGray6).ignoresSafeArea())
-                        .padding(.bottom, -94)
+                    case .explore:
+                        ExploreView(showSidebar: $showSidebar)
+                    }
                 }
                 CustomTabBar(
                     selectedTab: $selectedTab,
@@ -122,7 +121,7 @@ struct MainTabView: View {
                     })
                 default:
                     ContentView(
-                        setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path
+                        setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path, showSidebar: $showSidebar
                     )
                 }
             }
