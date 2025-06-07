@@ -471,7 +471,7 @@ struct PuzzleView: View {
         .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
-                            showExitPopup = true // Show your custom popup!
+                            showExitPopup = true
                         }) {
                             HStack {
                                 Image(systemName: "chevron.left")

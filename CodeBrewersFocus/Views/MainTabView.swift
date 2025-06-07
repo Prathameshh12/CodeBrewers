@@ -22,11 +22,11 @@ struct MainTabView: View {
     func resetPuzzle() {
         session.pieces = (1...30).map { PuzzlePiece(imageName: String(format: "Wave-%02d", $0)) }
         session.onHoldShelf = []
-            session.selectedColor = .clear
+        session.selectedColor = .clear
     }
     
     
-
+    
     var body: some View {
         NavigationStack(path: $path) {
             ZStack(alignment: .bottom) {
@@ -52,6 +52,18 @@ struct MainTabView: View {
                 .background(Color(.systemGray6).ignoresSafeArea())
                 .padding(.bottom, -94)
                 
+                CustomTabBar(
+                    selectedTab: $selectedTab,
+                    onCreateAgain: {
+                        if selectedTab == .create {
+                            createGoToPuzzle?()
+                        } else {
+                            selectedTab = .create
+                        }
+                    }
+                )
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+                
                 if showSidebar {
                     Color.black.opacity(0.3)
                         .ignoresSafeArea()
@@ -64,20 +76,7 @@ struct MainTabView: View {
                         .animation(.easeInOut, value: showSidebar)
                         .zIndex(2)
                 }
-                
-                CustomTabBar(
-                    selectedTab: $selectedTab,
-                    onCreateAgain: {
-                        if selectedTab == .create {
-                            createGoToPuzzle?()
-                        } else {
-                            selectedTab = .create
-                        }
-                    }
-                )
-                .ignoresSafeArea(.keyboard, edges: .bottom)
-                .zIndex(99)
-                }
+            }
             .navigationDestination(for: String.self) { value in
                 switch value {
                 case "puzzle":

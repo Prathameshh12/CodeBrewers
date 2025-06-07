@@ -156,6 +156,7 @@ struct ExploreView: View {
                                 selectedCategory = category
                             }) {
                                 Text(category)
+                                    .font(.callout)
                                     .padding(.horizontal, 20)
                                     .padding(.vertical, 4)
                                     .background(selectedCategory == category ? Color.black : Color.white.opacity(0.9))

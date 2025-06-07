@@ -5,11 +5,6 @@ struct ProgressView: View {
     var body: some View {
             
             VStack {
-                Text("Progress")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.center)
-
                 HStack {
                     Text("One Focus, Better Result")
                         .foregroundColor(.black)
@@ -101,6 +96,9 @@ struct ProgressView: View {
              Spacer()
             }
             .background(Color(.systemGray6))
+            .navigationBarBackButtonHidden(false)
+            .navigationTitle("Progress")
+            .navigationBarTitleDisplayMode(.inline)
             
         }
     }
