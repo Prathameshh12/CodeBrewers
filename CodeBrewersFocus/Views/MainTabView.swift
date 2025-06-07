@@ -18,6 +18,8 @@ struct MainTabView: View {
     @State private var path: [String] = []
     @StateObject private var session = PuzzleSession()
     
+    @State private var showDraftOptions = false
+    
     func resetPuzzle() {
         session.pieces = (1...30).map { PuzzlePiece(imageName: String(format: "Wave-%02d", $0)) }
         session.onHoldShelf = []
@@ -53,14 +55,57 @@ struct MainTabView: View {
                     selectedTab: $selectedTab,
                     onCreateAgain: {
                         if selectedTab == .create {
-                            createGoToPuzzle?()
+                            if PuzzleDraftManager.shared.draftExists() {
+                                showDraftOptions = true
+                            } else {
+                                createGoToPuzzle?()
+                            }
                         } else {
                             selectedTab = .create
                         }
                     }
                 )
+                // popup menu for resume draft
+                .overlay(
+                    Group {
+                        if showDraftOptions {
+                            HStack(spacing: 0) {
+                                Button("Resume draft") {
+                                    showDraftOptions = false
+                                    createGoToPuzzle?()
+                                }
+                                .padding(.vertical)
+                                .padding(.vertical, 10)
+                                .foregroundColor(.black)
+                                
+                               
+                                Divider()
+                                    .padding()
+                                
+                                Button("Start new") {
+                                    PuzzleDraftManager.shared.clearDraft()
+                                    resetPuzzle()
+                                    showDraftOptions = false
+                                    createGoToPuzzle?()
+                                }
+                                .padding(.vertical)
+                                .padding(.vertical, 10)
+                                .foregroundColor(.black)
+                                
+                            }
+                            .frame(width: 210)
+                            .frame(height: 50)
+                            .background(.ultraThinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .shadow(radius: 5)
+                            .offset(y: -100) // Position just above the tab bar
+                            .transition(.scale)
+                        }
+                    }, alignment: .bottom
+                )
                 .edgesIgnoringSafeArea(.bottom)
             }
+            
             .navigationDestination(for: String.self) { value in
                 switch value {
                 case "puzzle":

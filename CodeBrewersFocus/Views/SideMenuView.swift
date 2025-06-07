@@ -6,14 +6,14 @@ struct SideMenuView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             HStack(){
-            Image("wave")
+            Image("LogoBlock")
                 .resizable()
                 .scaledToFill()
                 .frame(width: 40, height: 40)
-                .clipShape(Circle())
+                .clipShape(Rectangle())
                 .padding(.leading, 16)
                 .padding(.top, 40)
-            Text("Mr. Puppy")
+            Text("Singular")
                 .font(.title2)
                 .fontWeight(.bold)
                 .padding(.top, 40)
