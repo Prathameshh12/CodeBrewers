@@ -12,6 +12,7 @@ struct ExpandExploreView: View {
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
+                    .offset(x: -14)
             }
             
             

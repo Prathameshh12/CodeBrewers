@@ -1,8 +1,4 @@
 
-
-
-
-
 import Foundation
 
 class PuzzleDraftManager {
@@ -11,9 +7,12 @@ class PuzzleDraftManager {
 
     func saveDraft(_ pieces: [PuzzlePiece]) {
         let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(pieces) {
-            UserDefaults.standard.set(encoded, forKey: draftKey)
-        }
+        do {
+                let encoded = try encoder.encode(pieces)
+                UserDefaults.standard.set(encoded, forKey: draftKey)
+            } catch {
+                print("Failed to encode puzzle draft: \(error)")
+            }
     }
 
     func loadDraft() -> [PuzzlePiece]? {

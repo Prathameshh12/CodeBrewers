@@ -30,7 +30,9 @@ struct AnalysisView: View {
             .padding(.bottom, 50)
             
             Button(action: {
-                path.append("write")
+                if path.last != "write" {
+                    path.append("write")
+                }
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "bubbles.and.sparkles.fill")

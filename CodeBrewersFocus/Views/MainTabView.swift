@@ -13,6 +13,7 @@ enum Tab {
 }
 
 struct MainTabView: View {
+    @State private var showSidebar = false
     @State private var selectedTab: Tab = .create
     @State private var createGoToPuzzle: (() -> Void)? = nil
     @State private var path: [String] = []
@@ -21,34 +22,49 @@ struct MainTabView: View {
     func resetPuzzle() {
         session.pieces = (1...30).map { PuzzlePiece(imageName: String(format: "Wave-%02d", $0)) }
         session.onHoldShelf = []
-        session.selectedColor = .clear
+            session.selectedColor = .clear
     }
     
     
 
     var body: some View {
-        
         NavigationStack(path: $path) {
             ZStack(alignment: .bottom) {
-                switch selectedTab {
-                case .reflections:
-                    ReflectionsView()
+                Group {
+                    switch selectedTab {
+                    case .reflections:
+                        ReflectionsView(showSidebar: $showSidebar)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .background(Color(.systemGray6).ignoresSafeArea())
+                            .padding(.bottom, -94)
+                    case .create:
+                        ContentView(
+                            setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path, showSidebar: $showSidebar
+                        )
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color(.systemGray6).ignoresSafeArea())
                         .padding(.bottom, -94)
-                case .create:
-                    ContentView(
-                        setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path
-                    )
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color(.systemGray6).ignoresSafeArea())
-                    .padding(.bottom, -94)
-                case .explore:
-                    ExploreView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color(.systemGray6).ignoresSafeArea())
-                        .padding(.bottom, -94)
+                    case .explore:
+                        ExploreView(showSidebar: $showSidebar)
+                    }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color(.systemGray6).ignoresSafeArea())
+                .padding(.bottom, -94)
+                
+                if showSidebar {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation { showSidebar = false }
+                        }
+                        .zIndex(1)
+                    SideMenuView()
+                        .transition(.move(edge: .leading))
+                        .animation(.easeInOut, value: showSidebar)
+                        .zIndex(2)
+                }
+                
                 CustomTabBar(
                     selectedTab: $selectedTab,
                     onCreateAgain: {
@@ -59,8 +75,9 @@ struct MainTabView: View {
                         }
                     }
                 )
-                .edgesIgnoringSafeArea(.bottom)
-            }
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .zIndex(99)
+                }
             .navigationDestination(for: String.self) { value in
                 switch value {
                 case "puzzle":
@@ -77,7 +94,7 @@ struct MainTabView: View {
                     })
                 default:
                     ContentView(
-                        setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path
+                        setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path, showSidebar: $showSidebar
                     )
                 }
             }

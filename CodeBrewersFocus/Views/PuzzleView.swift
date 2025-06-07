@@ -505,7 +505,3 @@ struct PuzzleView: View {
 #Preview {
     MainTabView()
 }
-
-
-
-

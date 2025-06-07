@@ -1,37 +1,37 @@
-
-
 import SwiftUI
 
 struct SideMenuView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            HStack(){
-            Image("wave")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 40, height: 40)
-                .clipShape(Circle())
-                .padding(.leading, 16)
-                .padding(.top, 40)
-            Text("Mr. Puppy")
-                .font(.title2)
-                .fontWeight(.bold)
-                .padding(.top, 40)
-            
-        }
-            NavigationLink(destination: ProgressView()) {
-                Text("My Progress")
+
+            HStack (alignment: .center, spacing: 12) {
+                Image("LogoBlock")
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .padding(.leading, 16)
+                    .padding(.top)
+                
+                Text("Mr. Puppy")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .padding(.top)
+                
             }
 
+            NavigationLink(destination: ProgressView()) {
+                Text("My Progress")
+                    .padding(.leading, 16)
+            }
             Spacer()
         }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(width: 280, alignment: .leading)
         .background(Color.white)
-        .edgesIgnoringSafeArea(.all)
+        .shadow(radius: 12)
+        .offset(x: -60)
+//        .ignoresSafeArea(.all)
     }
 }
 
 #Preview {
-    MainTabView()
+    SideMenuView()
 }
