@@ -25,6 +25,7 @@ struct MainTabView: View {
     @State private var showBrowseDrafts = false
     @State private var selectedDraft: PuzzleDraft?
     @State private var shouldLoadDraft = true
+    @State private var showLanding = true
     
     func resetPuzzle() {
         session.pieces = (1...30).map { PuzzlePiece(imageName: String(format: "Wave-%02d", $0)) }
@@ -119,6 +120,7 @@ struct MainTabView: View {
                         .zIndex(3)
                         .padding(.bottom, 100)
                     }
+//                    zIndex(1)
                     .sheet(isPresented: $showBrowseDrafts) {
                         BrowseDraftsView(selectedDraft: $selectedDraft)
                     }
@@ -170,6 +172,22 @@ struct MainTabView: View {
             }
         }
         .environmentObject(session)
+        if showLanding
+                {
+                    LandingPageView()
+                    .edgesIgnoringSafeArea(.all)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .zIndex(1)
+                    .opacity(showLanding ? 1 : 0) // fade based on state
+                    .animation(.easeOut(duration: 2), value: showLanding)
+                    .onAppear
+                    {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5)
+                        {
+                            showLanding = false // triggers fade out
+                        }
+                    }
+                }
     }
 }
 
