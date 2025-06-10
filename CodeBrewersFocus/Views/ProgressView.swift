@@ -11,7 +11,8 @@ import SwiftUI
 
 struct ProgressView: View {
     var body: some View {
-        //NavigationStack(){
+        // NavigationStack(){
+        // Commenting the navigation stack as it is causing navigating to the intended page only on the second click 
             
             VStack {
                 Text("Progress")
