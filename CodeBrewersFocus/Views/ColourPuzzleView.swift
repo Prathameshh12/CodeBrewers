@@ -9,8 +9,9 @@ struct PuzzlePieceCell: View {
         ZStack {
             if !piece.isPlaceholder {
                 Image(piece.imageName)
+                    .renderingMode(.template)
                     .resizable()
-                    .blendMode(piece.isInverted ? .difference : .normal)
+                    .foregroundColor(selectedColor)
                     .rotationEffect(.degrees(piece.rotation))
                     .scaleEffect(
                         x: piece.flippedHorizontally ? -1 : 1,
@@ -19,7 +20,7 @@ struct PuzzlePieceCell: View {
                     .frame(width: 68, height: 68)
 
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(selectedColor.opacity(0.3))
+                    .fill(selectedColor.quaternary)
             } else {
                 RoundedRectangle(cornerRadius: 14)
                     .stroke(style: StrokeStyle(lineWidth: 1, dash: [2]))

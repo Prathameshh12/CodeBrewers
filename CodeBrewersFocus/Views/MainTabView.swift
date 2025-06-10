@@ -2,7 +2,7 @@ import SwiftUI
 
 class PuzzleSession: ObservableObject {
     @Published var pieces: [PuzzlePiece] = []
-    @Published var selectedColor: Color = .clear
+    @Published var selectedColor: Color = .black
 }
 
 enum Tab {
