@@ -86,7 +86,7 @@ struct MainTabView: View {
                         Color.black.opacity(0.001)
                             .ignoresSafeArea()
                             .onTapGesture {
-                                withAnimation {
+                                withAnimation(.easeOut(duration: 0.20)) {
                                     showDraftOptions = false
                                 }
                             }
@@ -96,7 +96,7 @@ struct MainTabView: View {
                             Button("Resume draft") {
                                 showBrowseDrafts = true
                                 showDraftOptions = false
-                                createGoToPuzzle?()
+                                
                             }
                             .padding(.vertical, 10)
                             .foregroundColor(.black)
