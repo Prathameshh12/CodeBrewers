@@ -126,6 +126,8 @@ struct ExploreView: View {
     
     var body: some View {
         ZStack(alignment: .leading) {
+            Color(.systemGray6)
+                .ignoresSafeArea()
             VStack(alignment: .leading, spacing: 0) {
                 // MARK: -  Top Bar
                 HStack {
@@ -197,7 +199,7 @@ struct ExploreView: View {
                     .padding(.horizontal, gridPadding)
                     .padding(.top, 4)
                 }
-                .padding(.bottom, 160)
+                .padding(.bottom, 60)
             }
             .onAppear {
                 if shuffledItems.isEmpty {

@@ -77,58 +77,63 @@ struct MainTabView: View {
                         }
                     }
                 )
-                // popup menu for resume draft
-                .overlay(
-                    Group {
-                        if showDraftOptions {
-                            HStack(spacing: 0) {
-                                Button("Resume draft") {
-                                    showBrowseDrafts = true
-                                    showDraftOptions = false
-                                    createGoToPuzzle?()
-                                }
-                                .padding(.vertical)
-                                .padding(.vertical, 10)
-                                .foregroundColor(.black)
-                                
-                                
-                                Divider()
-                                    .padding()
-                                
-                                Button("Start new") {
-                                    shouldLoadDraft = false
-                                    resetPuzzle()
-                                    showDraftOptions = false
-                                    createGoToPuzzle?()
-                                }
-                                .padding(.vertical)
-                                .padding(.vertical, 10)
-                                .foregroundColor(.black)
-                                
-                            }
-                            .frame(width: 210)
-                            .frame(height: 50)
-                            .background(.ultraThinMaterial)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .shadow(radius: 5)
-                            .offset(y: -100) // Position just above the tab bar
-                            .transition(.scale)
-                        }
-                    }, alignment: .bottom
-                )
                 .edgesIgnoringSafeArea(.bottom)
-                
-                .sheet(isPresented: $showBrowseDrafts) {
-                    BrowseDraftsView(selectedDraft: $selectedDraft)
-                }
-                .onChange(of: selectedDraft) { oldValue, newValue in
-                    if let draft = newValue {
-                        session.pieces = draft.pieces
-                        session.onHoldShelf = []
-                        session.selectedColor = .clear
-                        path = ["puzzle"]
+                if showDraftOptions {
+                    Color.black.opacity(0.001)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation {
+                                showDraftOptions = false
+                            }
+                        }
+                        .zIndex(2)
+                    
+                    VStack {
+                        Spacer()
+                        HStack(spacing: 0) {
+                            Button("Resume draft") {
+                                showBrowseDrafts = true
+                                showDraftOptions = false
+                                createGoToPuzzle?()
+                            }
+                            .padding(.vertical, 15)
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(.black)
+                            
+                            
+                            Button("Start new") {
+                                shouldLoadDraft = false
+                                resetPuzzle()
+                                showDraftOptions = false
+                                createGoToPuzzle?()
+                            }
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(.black)
+                        }
+                        .frame(width: 220, height: 50)
+                        .background(.ultraThinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .shadow(radius: 5)
+                        .transition(.scale)
+                        .zIndex(3)
+                        .padding(.bottom, 100)
                     }
+                    .sheet(isPresented: $showBrowseDrafts) {
+                        BrowseDraftsView(selectedDraft: $selectedDraft)
+                    }
+                    .onChange(of: selectedDraft) { oldValue, newValue in
+                        if let draft = newValue {
+                            session.pieces = draft.pieces
+                            session.onHoldShelf = []
+                            session.selectedColor = .clear
+                            path = ["puzzle"]
+                        }
+                    }
+                    
                 }
+                
+                
                 if showSidebar {
                     Color.black.opacity(0.3)
                         .ignoresSafeArea()
@@ -203,6 +208,7 @@ struct CustomTabBar: View {
                         .frame(width: 78, height: 78)
                         .shadow(color: .blue.opacity(0.18), radius: 8, y: 6)
                         .offset(y: -32)
+                        .offset(x: -8)
                     Button {
                         onCreateAgain()
                     } label: {
@@ -214,6 +220,7 @@ struct CustomTabBar: View {
                         .foregroundColor(.white)
                     }
                     .offset(y: -32)
+                    .offset(x: -8)
                 }
                 Spacer()
 // MARK: - Explore

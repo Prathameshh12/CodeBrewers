@@ -17,12 +17,12 @@ struct AccountView: View {
     var body: some View {
         Form {
             Section(header: Text("Name").foregroundColor(.gray)) {
-                TextField("Enter your name", text: $name)
+                TextField("alex_0406", text: $name)
                     .autocapitalization(.words)
             }
 
             Section(header: Text("E-mail").foregroundColor(.gray)) {
-                TextField("Enter your email", text: $email)
+                TextField("alexbernedett@gmail.com", text: $email)
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
             }
