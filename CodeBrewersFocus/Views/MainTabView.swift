@@ -79,63 +79,51 @@ struct MainTabView: View {
                     }
                 )
                 .edgesIgnoringSafeArea(.bottom)
+                
+                // popup menu
                 if showDraftOptions {
-                    Color.black.opacity(0.001)
-                        .ignoresSafeArea()
-                        .onTapGesture {
-                            withAnimation {
-                                showDraftOptions = false
+                    ZStack {
+                        Color.black.opacity(0.001)
+                            .ignoresSafeArea()
+                            .onTapGesture {
+                                withAnimation {
+                                    showDraftOptions = false
+                                }
                             }
-                        }
-                        .zIndex(2)
-                    
-                    VStack {
-                        Spacer()
+                        
+                        // Draft options popup
                         HStack(spacing: 0) {
                             Button("Resume draft") {
                                 showBrowseDrafts = true
                                 showDraftOptions = false
                                 createGoToPuzzle?()
                             }
-                            .padding(.vertical, 15)
-                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
                             .foregroundColor(.black)
                             
+                            Divider()
+                                .padding()
                             
                             Button("Start new") {
+                                session.isNewPuzzle = true
                                 shouldLoadDraft = false
                                 resetPuzzle()
                                 showDraftOptions = false
                                 createGoToPuzzle?()
                             }
                             .padding(.vertical, 10)
-                            .frame(maxWidth: .infinity)
                             .foregroundColor(.black)
                         }
                         .frame(width: 220, height: 50)
                         .background(.ultraThinMaterial)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .shadow(radius: 5)
+                        .offset(y: 260)
                         .transition(.scale)
-                        .zIndex(3)
-                        .padding(.bottom, 100)
                     }
-//                    zIndex(1)
-                    .sheet(isPresented: $showBrowseDrafts) {
-                        BrowseDraftsView(selectedDraft: $selectedDraft)
-                    }
-                    .onChange(of: selectedDraft) { oldValue, newValue in
-                        if let draft = newValue {
-                            session.pieces = draft.pieces
-                            session.onHoldShelf = []
-                            session.selectedColor = .clear
-                            path = ["puzzle"]
-                        }
-                    }
-                    
+                    .zIndex(3)
                 }
-                
-                
+    
                 if showSidebar {
                     Color.black.opacity(0.3)
                         .ignoresSafeArea()
@@ -168,6 +156,17 @@ struct MainTabView: View {
                     ContentView(
                         setGoToPuzzle: { closure in self.createGoToPuzzle = closure }, path: $path, showSidebar: $showSidebar
                     )
+                }
+            }
+            .sheet(isPresented: $showBrowseDrafts) {
+                BrowseDraftsView(selectedDraft: $selectedDraft)
+            }
+            .onChange(of: selectedDraft) { oldValue, newValue in
+                if let draft = newValue {
+                    session.pieces = draft.pieces
+                    session.onHoldShelf = []
+                    session.selectedColor = .clear
+                    path = ["puzzle"]
                 }
             }
         }
