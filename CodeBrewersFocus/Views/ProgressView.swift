@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ProgressView: View {
     var body: some View {
-        NavigationStack(){
+        //NavigationStack(){
             
             VStack {
                 Text("Progress")
@@ -135,7 +135,7 @@ struct ProgressView: View {
             
         }
     }
-}
+//}
 
 
 #Preview {
