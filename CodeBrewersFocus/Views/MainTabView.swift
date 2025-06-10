@@ -18,6 +18,7 @@ struct MainTabView: View {
     @State private var createGoToPuzzle: (() -> Void)? = nil
     @State private var path: [String] = []
     @StateObject private var session = PuzzleSession()
+    @State private var showLanding = true
     
     @State private var showDraftOptions = false
     
@@ -30,6 +31,7 @@ struct MainTabView: View {
     
     
     var body: some View {
+    
         NavigationStack(path: $path) {
             ZStack(alignment: .bottom) {
                 Group {
@@ -127,6 +129,22 @@ struct MainTabView: View {
             }
         }
         .environmentObject(session)
+        if showLanding
+        {
+            LandingPageView()
+            .edgesIgnoringSafeArea(.all)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .zIndex(1)
+            .opacity(showLanding ? 1 : 0) // fade based on state
+            .animation(.easeOut(duration: 2), value: showLanding) 
+            .onAppear
+            {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5)
+                {
+                    showLanding = false // triggers fade out
+                }
+            }
+        }
     }
 }
 
