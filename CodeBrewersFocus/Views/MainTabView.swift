@@ -4,6 +4,8 @@ class PuzzleSession: ObservableObject {
     @Published var pieces: [PuzzlePiece] = []
     @Published var selectedColor: Color = .clear
     @Published var onHoldShelf: [PuzzlePiece] = []
+    
+    @Published var isNewPuzzle: Bool = false
 }
 
 
@@ -20,12 +22,22 @@ struct MainTabView: View {
     @StateObject private var session = PuzzleSession()
     
     @State private var showDraftOptions = false
+    @State private var showBrowseDrafts = false
+    @State private var selectedDraft: PuzzleDraft?
+    @State private var shouldLoadDraft = true
     
     func resetPuzzle() {
         session.pieces = (1...30).map { PuzzlePiece(imageName: String(format: "Wave-%02d", $0)) }
         session.onHoldShelf = []
         session.selectedColor = .clear
+        session.isNewPuzzle = true 
     }
+    
+    func loadDraft(_ draft: PuzzleDraft) {
+            session.pieces = draft.pieces
+            session.onHoldShelf = []
+            session.selectedColor = .clear
+        }
     
     
     
@@ -54,9 +66,10 @@ struct MainTabView: View {
                     selectedTab: $selectedTab,
                     onCreateAgain: {
                         if selectedTab == .create {
-                            if PuzzleDraftManager.shared.draftExists() {
+                            if !PuzzleDraftManager.shared.loadDrafts().isEmpty {
                                 showDraftOptions = true
                             } else {
+                                resetPuzzle()
                                 createGoToPuzzle?()
                             }
                         } else {
@@ -70,6 +83,7 @@ struct MainTabView: View {
                         if showDraftOptions {
                             HStack(spacing: 0) {
                                 Button("Resume draft") {
+                                    showBrowseDrafts = true
                                     showDraftOptions = false
                                     createGoToPuzzle?()
                                 }
@@ -82,7 +96,7 @@ struct MainTabView: View {
                                     .padding()
                                 
                                 Button("Start new") {
-                                    PuzzleDraftManager.shared.clearDraft()
+                                    shouldLoadDraft = false
                                     resetPuzzle()
                                     showDraftOptions = false
                                     createGoToPuzzle?()
@@ -103,6 +117,18 @@ struct MainTabView: View {
                     }, alignment: .bottom
                 )
                 .edgesIgnoringSafeArea(.bottom)
+                
+            }
+            .sheet(isPresented: $showBrowseDrafts) {
+                BrowseDraftsView(selectedDraft: $selectedDraft)
+            }
+            .onChange(of: selectedDraft) { oldValue, newValue in
+                if let draft = newValue {
+                    session.pieces = draft.pieces
+                    session.onHoldShelf = []
+                    session.selectedColor = .clear
+                    path = ["puzzle"]
+                }
             }
             
             .navigationDestination(for: String.self) { value in
