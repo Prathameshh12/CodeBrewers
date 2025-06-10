@@ -1,42 +1,10 @@
 
-//
-//  ContentView.swift
-//  Progress Page
-//
-//  Created by Lia Pereira Dullius on 3/6/2025.
-//
-
-
 import SwiftUI
 
 struct ProgressView: View {
     var body: some View {
-        NavigationStack(){
             
             VStack {
-                Text("Progress")
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.center)
-                
-                //Nav bar
-                //                HStack {
-                //                    Image(systemName: "chevron.backward")
-                //                        .font(.system(size: 25))
-                //                        .foregroundColor(.gray)
-                //                    Spacer()
-                //                    Text("Progress")
-                //                        .font(.headline)
-                //                        .fontWeight(.semibold)
-                //                        Spacer()
-                //                    Image(systemName: "xmark")
-                //                        .font(.system(size: 25))
-                //                        .foregroundColor(.gray)
-                //                        .opacity(0)
-                //                    }
-                //                .padding(.horizontal)
-                //                .padding(.top, 10)
-// One focus section
                 HStack {
                     Text("One Focus, Better Result")
                         .foregroundColor(.black)
@@ -125,17 +93,15 @@ struct ProgressView: View {
                 .padding(.horizontal)
                 
                 
-                
-              
-                
              Spacer()
             }
             .background(Color(.systemGray6))
-          
+            .navigationBarBackButtonHidden(false)
+            .navigationTitle("Progress")
+            .navigationBarTitleDisplayMode(.inline)
             
         }
     }
-}
 
 
 #Preview {

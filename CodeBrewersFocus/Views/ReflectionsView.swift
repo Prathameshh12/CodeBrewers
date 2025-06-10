@@ -1,9 +1,4 @@
-//
-//  ContentView.swift
-//  reflectionsPage
-//
-//  Created by Megha Elisa George on 30/5/2025.
-//
+
 import SwiftUI
 
 struct FavoriteItem: Identifiable {
@@ -17,8 +12,47 @@ struct FavoriteItem: Identifiable {
     let reflect: String
 }
 
+// MARK: - BuildCard
+func buildCard(for item: FavoriteItem) -> some View {
+    NavigationLink(destination: ExpandReflectionView(item: item)) {
+        HStack {
+            Image(item.imageName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 68, height: 68)
+                .padding(.leading, 12)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text(item.name)
+                    .font(.title3)
+                    .foregroundColor(.black)
+                
+                Text(item.desc)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                
+                Text(item.date)
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+            }
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .foregroundColor(.gray)
+                .padding(.trailing, 16)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(Color.white)
+        .cornerRadius(16)
+        .padding(.horizontal)
+    }
+    .buttonStyle(PlainButtonStyle())
+}
+
 struct ReflectionsView: View{
-    @State private var showSidebar = false
+    @Binding var showSidebar: Bool
     @State private var reflectionText = ""
     @State private var showConfirmation = false
     @FocusState private var isTextEditorFocused: Bool
@@ -34,103 +68,47 @@ struct ReflectionsView: View{
     
     var body: some View {
         ZStack(alignment: .leading) {
-            NavigationStack(){
-                VStack(alignment: .leading){
-                    // MARK: - Top Bar
-                    HStack {
-                        Button(action: {
-                            withAnimation {
-                                showSidebar.toggle()
-                            }
-                        }) {
-                            Image("LogoBlock")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 30, height: 30)
-                        }
-                        Text("Reflections")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .padding(.leading, 8)
-                        Spacer()
-                    }
-                    .padding(.top)
-                    .padding(.horizontal)
-                    // MARK: - Main Part
-                    ScrollView {
-                        VStack(spacing: 14) {
-                            ForEach(items) { item in
-                                buildCard(for: item)
-                            }
-                        }
-                        .padding(.bottom, 20)
-                    }
-                    .background(Color(.systemGray6))
-                    .padding(.bottom, 100)
-                    
-                }
-                .padding(.bottom, 50)
-            }
             
+            Color(.systemGray6)
+                .ignoresSafeArea()
             
-// MARK: - Side Menu
-            if showSidebar {
-                Color.black.opacity(0.3)
-                    .ignoresSafeArea()
-                    .onTapGesture {
+            VStack(alignment: .leading){
+                // MARK: - Top Bar
+                HStack {
+                    Button(action: {
                         withAnimation {
-                            showSidebar = false
+                            showSidebar.toggle()
+                        }
+                    }) {
+                        Image("LogoBlock")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 30, height: 30)
+                    }
+                    Text("Reflections")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .padding(.leading, 8)
+                    Spacer()
+                }
+                .padding(.top)
+                .padding(.horizontal)
+                // MARK: - Main Part
+                ScrollView {
+                    VStack(spacing: 14) {
+                        ForEach(items) { item in
+                            buildCard(for: item)
                         }
                     }
-                
-                SideMenuView()
-                    .frame(width: 300)
-                    .transition(.move(edge: .leading))
-                    .offset(x: showSidebar ? 0 : -260)
-                    .animation(.easeInOut, value: showSidebar)
-            }
-        }
-    }
-    
-    // MARK: - BuildCard
-    func buildCard(for item: FavoriteItem) -> some View {
-        NavigationLink(destination: ExpandReflectionView(item: item)) {
-            HStack {
-                Image(item.imageName)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 68, height: 68)
-                    .padding(.leading, 12)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(item.name)
-                        .font(.title3)
-                        .foregroundColor(.black)
-                    
-                    Text(item.desc)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                    
-                    Text(item.date)
-                        .font(.footnote)
-                        .foregroundColor(.gray)
+                    .padding(.bottom, 20)
                 }
-                
-                Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
-                    .padding(.trailing, 16)
+                .padding(.bottom, 100)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(Color.white)
-            .cornerRadius(16)
-            .padding(.horizontal)
+            .padding(.bottom, 50)
         }
-        .buttonStyle(PlainButtonStyle())
     }
 }
+
 #Preview {
     MainTabView()
 }

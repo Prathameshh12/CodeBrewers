@@ -13,6 +13,7 @@ struct ExpandReflectionView: View {
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
+                    .offset(x: -12)
             }
 // MARK: - Main Part
             VStack (spacing: 20){
