@@ -1,30 +1,24 @@
 // Created by Arjun Agarwal
 
 import SwiftUI
-import PhotosUI
-import UIKit
 
+// Side menu view containing a fixed logo, static username, and navigation menu items
 struct SideMenuView: View {
-    @State private var selectedImage: UIImage? = nil
+    // Static username displayed below the logo
     @State private var username: String = "Singular"
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // Profile Section
+            
+            // MARK: - Profile Section
             HStack(spacing: 12) {
-                ZStack {
-                    if let image = selectedImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                    } else {
-                        Image("LogoBlock")
-                            .resizable()
-                    }
-                }
-                .frame(width: 40, height: 40)
+                // Fixed app logo image
+                Image("LogoBlock")
+                    .resizable()
+                    .frame(width: 40, height: 40)
 
-                Text(username)
+                // Static username display
+                Text("Singualar")
                     .font(.title3)
                     .fontWeight(.semibold)
             }
@@ -33,21 +27,23 @@ struct SideMenuView: View {
             .padding(.leading, 12)
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            // Menu Items
+            // MARK: - Menu Items
+            // List of navigation options using reusable MenuItem components
             MenuItem(icon: "brain.fill", label: "My progress")
             MenuItem(icon: "info.circle.fill", label: "Instructions")
             MenuItem(icon: "person.fill", label: "Account")
             MenuItem(icon: "creditcard.fill", label: "Manage subscription")
 
-            Spacer()
+            Spacer() // Push remaining content to top
         }
         .padding(.top, 24)
         .frame(maxWidth: .infinity)
-        .background(Color(.systemBackground)) // Background
+        .background(Color(.systemBackground)) // Adaptive background for light/dark mode
         .edgesIgnoringSafeArea(.vertical)
     }
 }
 
+// Preview for development in Xcode canvas
 #Preview {
     MainTabView()
 }
