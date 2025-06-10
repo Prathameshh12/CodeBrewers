@@ -115,17 +115,18 @@ struct PuzzleView: View {
                         }
                     }
                     .onAppear {
+                
                         if session.isNewPuzzle {
-                            // Don't load draft — user started a new puzzle
-                            session.isNewPuzzle = false // Reset flag after honoring it
+                            return
+                        }
+
+                        // Load from latest draft only if not manually started
+                        let drafts = PuzzleDraftManager.shared.loadDrafts()
+                        if let latestDraft = drafts.last {
+                            session.pieces = latestDraft.pieces
                         } else {
-                            let drafts = PuzzleDraftManager.shared.loadDrafts()
-                            if let latestDraft = drafts.last {
-                                session.pieces = latestDraft.pieces
-                            } else {
-                                session.pieces = (1...30).map {
-                                    PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
-                                }
+                            session.pieces = (1...30).map {
+                                PuzzlePiece(imageName: String(format: "Wave-%02d", $0))
                             }
                         }
                     }

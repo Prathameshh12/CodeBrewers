@@ -21,7 +21,7 @@ class PuzzleDraftManager {
 
     private init() {}
 
-    func saveDraft(_ pieces: [PuzzlePiece], title: String = "Untitled Draft") {
+    func saveDraft(_ pieces: [PuzzlePiece], title: String = "Saved Draft") {
         var drafts = loadDrafts()
         let newDraft = PuzzleDraft(title: title, pieces: pieces)
         drafts.append(newDraft)
