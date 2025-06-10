@@ -78,11 +78,7 @@ struct PuzzleView: View {
     
 // MARK: - For On hold shelf
     @State private var onHoldShelf: [PuzzlePiece] = []
-    
-    
-    
-    
-    
+ 
 // MARK: - Main Part
     var body: some View {
         

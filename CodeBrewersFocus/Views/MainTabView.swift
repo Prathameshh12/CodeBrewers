@@ -91,7 +91,7 @@ struct MainTabView: View {
                                 .padding(.vertical, 10)
                                 .foregroundColor(.black)
                                 
-                               
+                                
                                 Divider()
                                     .padding()
                                 
@@ -118,23 +118,35 @@ struct MainTabView: View {
                 )
                 .edgesIgnoringSafeArea(.bottom)
                 
-            }
-            .sheet(isPresented: $showBrowseDrafts) {
-                BrowseDraftsView(selectedDraft: $selectedDraft)
-            }
-            .onChange(of: selectedDraft) { oldValue, newValue in
-                if let draft = newValue {
-                    session.pieces = draft.pieces
-                    session.onHoldShelf = []
-                    session.selectedColor = .clear
-                    path = ["puzzle"]
+                .sheet(isPresented: $showBrowseDrafts) {
+                    BrowseDraftsView(selectedDraft: $selectedDraft)
+                }
+                .onChange(of: selectedDraft) { oldValue, newValue in
+                    if let draft = newValue {
+                        session.pieces = draft.pieces
+                        session.onHoldShelf = []
+                        session.selectedColor = .clear
+                        path = ["puzzle"]
+                    }
+                }
+                if showSidebar {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation { showSidebar = false }
+                        }
+                        .zIndex(1)
+                    SideMenuView()
+                        .transition(.move(edge: .leading))
+                        .animation(.easeInOut, value: showSidebar)
+                        .zIndex(2)
                 }
             }
-            
             .navigationDestination(for: String.self) { value in
                 switch value {
                 case "puzzle":
                     PuzzleView(path: $path)
+                        .environmentObject(session)
                 case "colour":
                     ColourPuzzleView(path: $path)
                 case "analysing":
