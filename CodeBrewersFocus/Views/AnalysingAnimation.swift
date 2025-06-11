@@ -10,7 +10,7 @@ struct ColourPuzzleSnapshot: View {
                     ForEach(0..<5) { col in
                         let index = row * 5 + col
                         if index < session.pieces.count {
-                            PuzzlePieceCell(piece: session.pieces[index], selectedColor: session.selectedColor)
+                            PuzzlePieceCell(piece: $session.pieces[index], selectedColor: session.selectedColor)
                         }
                     }
                 }

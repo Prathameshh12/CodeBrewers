@@ -141,7 +141,6 @@ struct MainTabView: View {
                 switch value {
                 case "puzzle":
                     PuzzleView(path: $path)
-                        .environmentObject(session)
                 case "colour":
                     ColourPuzzleView(path: $path)
                 case "analysing":
