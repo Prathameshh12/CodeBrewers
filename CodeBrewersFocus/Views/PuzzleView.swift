@@ -19,7 +19,7 @@ struct PuzzlePiece: Identifiable, Hashable, Encodable, Decodable, Transferable {
     }
 extension UTType {
     static let puzzlePiece = UTType(exportedAs: "com.singular.puzzlepiece")
-    }
+}
 
 struct PuzzleBlockView: View {
     let piece: PuzzlePiece

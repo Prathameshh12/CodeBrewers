@@ -11,11 +11,12 @@ struct SubscribtionView: View {
     @State private var isEditing = false
 
     var body: some View {
-        ScrollView {
+        
             ZStack {
                 Color(.systemGray6)
                     .ignoresSafeArea()
-                
+                ScrollView {
+                    
                 VStack(spacing: 24) {
                     
                     
@@ -177,5 +178,5 @@ struct ExpiryAndCVC: View {
     }
 }
 #Preview {
-    MainTabView()
+    SubscribtionView()
 }

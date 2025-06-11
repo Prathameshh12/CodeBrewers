@@ -1,3 +1,4 @@
+// Created by Arjun Agarwal
 
 import SwiftUI
 import WebKit
@@ -10,6 +11,12 @@ struct GIFView: UIViewRepresentable {
         webView.scrollView.isScrollEnabled = false
         webView.isUserInteractionEnabled = false
         webView.backgroundColor = .clear
+        
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        webView.scrollView.backgroundColor = .clear
+        webView.scrollView.isScrollEnabled = false
+        webView.isUserInteractionEnabled = false
         
         let base64 = data.base64EncodedString()
                 let htmlString = """
@@ -44,24 +51,24 @@ struct InstructionPage: Identifiable {
 
 struct InstructionView: View {
     let pages = [
-        InstructionPage(title: "Create", description: "Drag and connect pieces to form your shape. Bin what’s unnecessary: focus is choosing what matters.", gifAssetName: "gif1"),
-        InstructionPage(title: "Discover", description: "Let the app recognise your masterpiece. See what it says about your focus today.", gifAssetName: "gif2"),
+        InstructionPage(title: "Create", description: "Drag and connect pieces to form your shape. Put in the shelf what’s not necessary: focus is choosing what matters.", gifAssetName: "gif1"),
+        InstructionPage(title: "Interpret", description: "Let the app recognise your masterpiece. See what it says about your focus today.", gifAssetName: "gif2"),
         InstructionPage(title: "Reflect", description: "Choose to type or voice-record your thoughts and insights. Your reflections are yours to revisit anytime.", gifAssetName: "gif3"),
-        InstructionPage(title: "Progress", description: "See your focus strengthen and your creativity bloom – because amazing things happen when you focus.", gifAssetName: "gif4"),
-        InstructionPage(title: "Explore", description: "See your focus strengthen and your creativity bloom – because amazing things happen when you focus.", gifAssetName: "gif5")
+        InstructionPage(title: "Explore", description: "Discover the community’s creations to spark your own, and share yours too. A mindful digital space is contagious.", gifAssetName: "gif4"),
+        InstructionPage(title: "Progress", description: "See your focus strengthen and your creativity bloom – because amazing things happen when you focus.", gifAssetName: "gif5")
     ]
 
     var body: some View {
         TabView {
             ForEach(pages) { page in
-                VStack(spacing: 20) {
+                VStack(spacing: 10) {
                     Spacer()
-                    
                     Text(page.title)
                         .font(.largeTitle)
                         .bold()
 
                     Text(page.description)
+                        .frame(width: 300, height: 90)
                         .font(.body)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
@@ -69,20 +76,21 @@ struct InstructionView: View {
                     ZStack {
                         if let assetData = NSDataAsset(name: page.gifAssetName)?.data {
                             GIFView(data: assetData)
+                            
                         }
                     }
-                    .frame(height: 250)
+                    .frame(height: 500)
                     .cornerRadius(16)
                     
-                    Spacer()
                 }
                 .padding()
                 .padding(.bottom, 60)
             }
+            
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
         .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-        .background(Color(.systemGray6))
+        .background(Color(.white).ignoresSafeArea())
     }
 }
 
