@@ -1,3 +1,5 @@
+//  Created by Arjun Agarwal
+
 import SwiftUI
 
 struct SideMenuView: View {

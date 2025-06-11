@@ -1,4 +1,4 @@
-// Created by Arjun Agarwal on Jun 11
+// Created by Arjun Agarwal
 
 import SwiftUI
 
