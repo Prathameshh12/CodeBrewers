@@ -52,6 +52,7 @@ class PuzzlePiece: Identifiable, Hashable, Encodable, Decodable, Transferable, O
     
     init(imageName: String, isPlaceholder: Bool = false) {
         self.imageName = imageName
+        self.isPlaceholder = isPlaceholder
     }
     
     static func == (lhs: PuzzlePiece, rhs: PuzzlePiece) -> Bool {
@@ -84,7 +85,7 @@ struct PuzzleBlockView: View {
                 .rotationEffect(.degrees(piece.rotation))
                 .scaleEffect(x: piece.flippedHorizontally ? -1 : 1, y: piece.flippedVertically ? -1 : 1)
                 .frame(width: 68, height: 68)
-            //                .background(piece.isInverted ? Color.blue : Color.clear)
+
         }
         .frame(width: 68, height: 68)
         .clipShape(RoundedRectangle(cornerRadius: 10))
