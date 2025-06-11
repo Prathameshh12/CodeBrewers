@@ -2,13 +2,10 @@ import SwiftUI
 
 class PuzzleSession: ObservableObject {
     @Published var pieces: [PuzzlePiece] = []
-    @Published var selectedColor: Color = .clear
+    @Published var selectedColor: Color = .black
     @Published var onHoldShelf: [PuzzlePiece] = []
-    
     @Published var isNewPuzzle: Bool = false
 }
-
-
 
 enum Tab {
     case reflections, create, explore
@@ -30,15 +27,18 @@ struct MainTabView: View {
     func resetPuzzle() {
         session.pieces = (1...30).map { PuzzlePiece(imageName: String(format: "Wave-%02d", $0)) }
         session.onHoldShelf = []
-        session.selectedColor = .clear
-        session.isNewPuzzle = true 
+        session.selectedColor = .black
+        session.isNewPuzzle = true
     }
     
     func loadDraft(_ draft: PuzzleDraft) {
-            session.pieces = draft.pieces
-            session.onHoldShelf = []
-            session.selectedColor = .clear
-        }
+        session.pieces = draft.pieces
+        session.onHoldShelf = []
+        session.selectedColor = .black
+    }
+    
+    @AppStorage("hasSeenInstructions") private var hasSeenInstructions: Bool = false
+    @State private var showInstructions = false
     
     
     
@@ -93,12 +93,12 @@ struct MainTabView: View {
                         
                         // Draft options popup
                         HStack(spacing: 0) {
-                            Button("Resume draft") {
+                            Button("Drafts") {
                                 showBrowseDrafts = true
                                 showDraftOptions = false
                                 
                             }
-                            .padding(.vertical, 10)
+                            .padding(.all, 10)
                             .foregroundColor(.black)
                             
                             Divider()
@@ -115,7 +115,7 @@ struct MainTabView: View {
                             .foregroundColor(.black)
                         }
                         .frame(width: 220, height: 50)
-                        .background(.ultraThinMaterial)
+                        .background(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .shadow(radius: 5)
                         .offset(y: 260)
@@ -123,7 +123,7 @@ struct MainTabView: View {
                     }
                     .zIndex(3)
                 }
-    
+                
                 if showSidebar {
                     Color.black.opacity(0.3)
                         .ignoresSafeArea()
@@ -165,47 +165,56 @@ struct MainTabView: View {
                 if let draft = newValue {
                     session.pieces = draft.pieces
                     session.onHoldShelf = []
-                    session.selectedColor = .clear
+                    session.selectedColor = .black
                     path = ["puzzle"]
                 }
             }
         }
         .environmentObject(session)
+        .sheet(isPresented: $showInstructions) {
+                InstructionView()
+            }
         if showLanding
+        {
+            LandingPageView()
+                .edgesIgnoringSafeArea(.all)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .zIndex(1)
+                .opacity(showLanding ? 1 : 0) // fade based on state
+                .animation(.easeOut(duration: 2), value: showLanding)
+                .onAppear
+            {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5)
                 {
-                    LandingPageView()
-                    .edgesIgnoringSafeArea(.all)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .zIndex(1)
-                    .opacity(showLanding ? 1 : 0) // fade based on state
-                    .animation(.easeOut(duration: 2), value: showLanding)
-                    .onAppear
-                    {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5)
-                        {
-                            showLanding = false // triggers fade out
-                        }
+                    showLanding = false // triggers fade out
+                    if !hasSeenInstructions {
+                        showInstructions = true
+                        hasSeenInstructions = true
                     }
                 }
+            }
+        }
+            
     }
+       
 }
 
 // MARK: - Setting up custom tab bar
 struct CustomTabBar: View {
     @Binding var selectedTab: Tab
-        var onCreateAgain: () -> Void
-
+    var onCreateAgain: () -> Void
+    
     var body: some View {
         ZStack {
-// MARK: - Tab bar look
+            // MARK: - Tab bar look
             Rectangle()
                 .fill(Color.white)
                 .shadow(color: .black.opacity(0.2), radius: 10, y: -2)
                 .frame(height: 90)
                 .padding(.bottom, -70)
-// MARK: -Tab bar function
+            // MARK: -Tab bar function
             HStack {
-// MARK: - Reflections
+                // MARK: - Reflections
                 Button {
                     selectedTab = .reflections
                 } label: {
@@ -215,10 +224,10 @@ struct CustomTabBar: View {
                         Text("Reflections").font(.caption)
                     }
                     .foregroundColor(selectedTab == .reflections ? .blue : .gray)
-                    .opacity(selectedTab == .reflections ? 1.0 : 0.5)
+                    .opacity(selectedTab == .reflections ? 1.0 : 0.8)
                 }
                 Spacer()
-// MARK: - Create
+                // MARK: - Create
                 ZStack {
                     Circle()
                         .fill(Color.blue)
@@ -240,7 +249,7 @@ struct CustomTabBar: View {
                     .offset(x: -8)
                 }
                 Spacer()
-// MARK: - Explore
+                // MARK: - Explore
                 Button {
                     selectedTab = .explore
                 } label: {
@@ -250,7 +259,7 @@ struct CustomTabBar: View {
                         Text("Explore").font(.caption)
                     }
                     .foregroundColor(selectedTab == .explore ? .blue : .gray)
-                    .opacity(selectedTab == .explore ? 1.0 : 0.5)
+                    .opacity(selectedTab == .explore ? 1.0 : 0.8)
                 }
             }
             .padding(.horizontal, 50)
